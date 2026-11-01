@@ -99,7 +99,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
             if location.path == "/api/health":
                 self._json(HTTPStatus.OK, {"status": "ok", "mode": "simulated_icu_replay"})
                 return
-            known = {"/api/models", "/api/patients", "/api/patient", "/api/snapshot", "/api/review", "/api/shap.csv", "/api/study"}
+            known = {"/api/models", "/api/patients", "/api/patient", "/api/snapshot", "/api/review", "/api/shap.csv", "/api/study", "/api/manual-ranges"}
             if location.path not in known:
                 self._json(HTTPStatus.NOT_FOUND, {"error": "Route not found"})
                 return
@@ -110,6 +110,8 @@ class DashboardHandler(BaseHTTPRequestHandler):
                     result = {"models": data.model_catalog()}
                 elif location.path == "/api/study":
                     result = data.study_metrics()
+                elif location.path == "/api/manual-ranges":
+                    result = {"ranges": data.physiological_ranges(), "schema": data.schema}
                 elif location.path == "/api/patients":
                     term = self._one(query, "query", "") if query.get("query") != [""] else ""
                     if len(term) > 100:
@@ -148,6 +150,39 @@ class DashboardHandler(BaseHTTPRequestHandler):
         except Exception:
             LOG.exception("Dashboard request failed")
             self._json(HTTPStatus.INTERNAL_SERVER_ERROR, {"error": "This request could not be completed. Details are in the dashboard terminal."})
+
+    def do_POST(self):
+        if not self._local_request():
+            self._json(HTTPStatus.FORBIDDEN, {"error": "Open this demo directly from its localhost address."})
+            return
+        try:
+            location = urlsplit(self.path)
+            if location.path != "/api/manual-assessment":
+                self._json(HTTPStatus.NOT_FOUND, {"error": "Route not found"})
+                return
+            length_header = self.headers.get("Content-Length", "")
+            try:
+                content_length = int(length_header)
+            except (ValueError, TypeError):
+                content_length = 0
+            if content_length <= 0 or content_length > 1_000_000:
+                raise ValueError("Payload must be a non-empty JSON body under 1 MB")
+            raw_body = self.rfile.read(content_length)
+            try:
+                payload = json.loads(raw_body.decode("utf-8"))
+            except (json.JSONDecodeError, UnicodeDecodeError) as error:
+                raise ValueError(f"Malformed JSON request: {error}") from error
+            with self.server.data_lock:
+                result = self.server.data.manual_assessment(payload)
+            self._json(HTTPStatus.OK, result)
+        except (ValueError, KeyError) as error:
+            self._json(HTTPStatus.BAD_REQUEST, {"error": str(error)})
+        except LookupError as error:
+            self._json(HTTPStatus.NOT_FOUND, {"error": str(error)})
+        except Exception:
+            LOG.exception("Manual assessment request failed")
+            self._json(HTTPStatus.INTERNAL_SERVER_ERROR, {"error": "Manual assessment could not be completed. Details are in the dashboard terminal."})
+
 
 
 def main(argv=None):

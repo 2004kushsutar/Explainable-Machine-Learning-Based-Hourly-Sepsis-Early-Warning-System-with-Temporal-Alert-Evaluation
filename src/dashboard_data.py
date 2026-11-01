@@ -43,6 +43,55 @@ NON_LABS = set(VITALS) | {"Age", "Gender", "Unit1", "Unit2", "HospAdmTime", "ICU
 UNITS = {"HR": "beats/min", "O2Sat": "%", "Temp": "°C", "SBP": "mmHg", "MAP": "mmHg",
          "DBP": "mmHg", "Resp": "breaths/min", "EtCO2": "mmHg", "Age": "years",
          "HospAdmTime": "hours", "ICULOS": "hours"}
+
+PHYSIOLOGICAL_RANGES = {
+    # Demographics & Admin
+    "Age": (0.0, 120.0, "years"),
+    "Gender": (0.0, 1.0, "0=Female, 1=Male"),
+    "Unit1": (0.0, 1.0, "0 or 1"),
+    "Unit2": (0.0, 1.0, "0 or 1"),
+    "HospAdmTime": (-10000.0, 240.0, "hours"),
+    "ICULOS": (1.0, 2000.0, "hours"),
+
+    # Vital signs
+    "HR": (20.0, 300.0, "beats/min"),
+    "O2Sat": (20.0, 100.0, "%"),
+    "Temp": (20.0, 48.0, "°C"),
+    "SBP": (20.0, 300.0, "mmHg"),
+    "MAP": (10.0, 300.0, "mmHg"),
+    "DBP": (10.0, 250.0, "mmHg"),
+    "Resp": (1.0, 100.0, "breaths/min"),
+    "EtCO2": (5.0, 120.0, "mmHg"),
+
+    # Laboratory tests
+    "BaseExcess": (-50.0, 100.0, "mEq/L"),
+    "HCO3": (0.0, 60.0, "mEq/L"),
+    "FiO2": (0.0, 1.0, "fraction (0.0-1.0)"),
+    "pH": (6.5, 8.0, "pH units"),
+    "PaCO2": (5.0, 150.0, "mmHg"),
+    "SaO2": (20.0, 100.0, "%"),
+    "AST": (1.0, 15000.0, "IU/L"),
+    "BUN": (1.0, 300.0, "mg/dL"),
+    "Alkalinephos": (1.0, 5000.0, "IU/L"),
+    "Calcium": (1.0, 30.0, "mg/dL"),
+    "Chloride": (20.0, 180.0, "mEq/L"),
+    "Creatinine": (0.1, 50.0, "mg/dL"),
+    "Bilirubin_direct": (0.0, 50.0, "mg/dL"),
+    "Glucose": (10.0, 1500.0, "mg/dL"),
+    "Lactate": (0.1, 40.0, "mmol/L"),
+    "Magnesium": (0.1, 15.0, "mg/dL"),
+    "Phosphate": (0.1, 30.0, "mg/dL"),
+    "Potassium": (1.0, 15.0, "mEq/L"),
+    "Bilirubin_total": (0.1, 60.0, "mg/dL"),
+    "TroponinI": (0.0, 500.0, "ng/mL"),
+    "Hct": (5.0, 75.0, "%"),
+    "Hgb": (1.0, 35.0, "g/dL"),
+    "PTT": (10.0, 300.0, "seconds"),
+    "WBC": (0.1, 500.0, "10^3/µL"),
+    "Fibrinogen": (10.0, 2000.0, "mg/dL"),
+    "Platelets": (1.0, 3000.0, "10^3/µL"),
+}
+
 MODEL_SPECS = {
     "baseline": ("XGBoost baseline", [], "Original 187-predictor research baseline."),
     "A": ("A · without ICU time", ["ICULOS"], "Exploratory ablation of the ICULOS predictor."),
@@ -475,4 +524,234 @@ class DashboardData:
                       }}
             json.dumps(result, allow_nan=False)
             return result
-            return result
+
+    @staticmethod
+    def physiological_ranges():
+        return PHYSIOLOGICAL_RANGES
+
+    def manual_assessment(self, payload):
+        """Perform ad-hoc causal scoring and SHAP explanation on user-supplied patient data.
+
+        Reuses the exact feature engineering pipeline and frozen model without saving
+        or modifying any persistent records, caches, or split definitions.
+        """
+        self._ensure_open()
+        if not isinstance(payload, dict):
+            raise DashboardInputError("Payload must be a JSON object")
+
+        model_name = payload.get("model", "baseline")
+        bundle = self._load_model(model_name)
+        threshold = bundle["threshold"]
+
+        demographics = payload.get("demographics") or {}
+        if not isinstance(demographics, dict):
+            raise DashboardInputError("demographics must be an object")
+
+        hours_input = payload.get("hours")
+        if not isinstance(hours_input, list) or len(hours_input) == 0:
+            raise DashboardInputError("At least one hourly observation is required")
+        if len(hours_input) > 200:
+            raise DashboardInputError("A maximum of 200 hourly observations can be evaluated")
+
+        predictors = [c for c in self.schema if c not in ("patient_id", "dataset", "SepsisLabel")]
+        demo_fields = ("Age", "Gender", "Unit1", "Unit2", "HospAdmTime")
+
+        # Validate demographics
+        validated_demo = {}
+        for key in demo_fields:
+            val = demographics.get(key)
+            if val is None or val == "":
+                validated_demo[key] = np.nan
+            else:
+                try:
+                    fval = float(val)
+                except (ValueError, TypeError) as err:
+                    raise DashboardInputError(f"Invalid numeric value for demographic '{key}': {val}") from err
+                if not np.isfinite(fval):
+                    raise DashboardInputError(f"Demographic '{key}' must be finite")
+                if key in PHYSIOLOGICAL_RANGES:
+                    min_val, max_val, unit = PHYSIOLOGICAL_RANGES[key]
+                    if not (min_val <= fval <= max_val):
+                        raise DashboardInputError(
+                            f"Demographic '{key}' value {fval} is outside plausible range [{min_val}, {max_val}] {unit}"
+                        )
+                if key in ("Gender", "Unit1", "Unit2") and fval not in (0.0, 1.0):
+                    raise DashboardInputError(f"Demographic '{key}' must be 0 or 1")
+                validated_demo[key] = fval
+
+        # Validate hourly observations
+        rows = []
+        seen_hours = []
+        for index, h_data in enumerate(hours_input, start=1):
+            if not isinstance(h_data, dict):
+                raise DashboardInputError(f"Hourly observation {index} must be an object")
+
+            raw_h = h_data.get("ICULOS", index)
+            try:
+                hour_val = float(raw_h)
+            except (ValueError, TypeError) as err:
+                raise DashboardInputError(f"Observation {index}: ICULOS must be numeric (got {raw_h})") from err
+            if not np.isfinite(hour_val) or hour_val <= 0 or hour_val != np.floor(hour_val):
+                raise DashboardInputError(f"Observation {index}: ICULOS must be a positive integer hour (got {hour_val})")
+            if seen_hours and hour_val <= seen_hours[-1]:
+                raise DashboardInputError(
+                    f"Observation {index}: ICULOS ({hour_val:g}) must be strictly greater than preceding hour ({seen_hours[-1]:g})"
+                )
+            seen_hours.append(hour_val)
+
+            row = {"patient_id": "MANUAL_PATIENT", "dataset": "A", "ICULOS": hour_val}
+            row.update(validated_demo)
+
+            for col in predictors:
+                if col in demo_fields or col == "ICULOS":
+                    continue
+                val = h_data.get(col)
+                if val is None or val == "":
+                    row[col] = np.nan
+                else:
+                    try:
+                        fval = float(val)
+                    except (ValueError, TypeError) as err:
+                        raise DashboardInputError(f"Hour {hour_val:g}: Invalid numeric value for '{col}': {val}") from err
+                    if not np.isfinite(fval):
+                        raise DashboardInputError(f"Hour {hour_val:g}: Value for '{col}' must be finite")
+                    if col in PHYSIOLOGICAL_RANGES:
+                        min_val, max_val, unit = PHYSIOLOGICAL_RANGES[col]
+                        if not (min_val <= fval <= max_val):
+                            raise DashboardInputError(
+                                f"Hour {hour_val:g}: '{col}' value {fval} is outside plausible range [{min_val}, {max_val}] {unit}"
+                            )
+                    row[col] = fval
+            rows.append(row)
+
+        frame = pd.DataFrame(rows, columns=["patient_id", "dataset"] + predictors)
+
+        # Reuse exact existing feature engineering and preprocessing pipeline
+        engineered = engineer_patient(frame, self.pipeline_config)
+        processed = apply_parameters(engineered, self.feature_info["features"], self.imputation_parameters)
+        values = processed[bundle["features"]].to_numpy(dtype=np.float32)
+
+        # Model scoring
+        probabilities = np.asarray(bundle["booster"].inplace_predict(
+            values, iteration_range=(0, bundle["best_iteration"] + 1)), dtype=np.float64)
+
+        n_obs = len(probabilities)
+        hourly_records = []
+        raw_positives = probabilities >= threshold
+
+        for i in range(n_obs):
+            h_val = float(frame["ICULOS"].iloc[i])
+            score = float(probabilities[i])
+            single_pos = bool(raw_positives[i])
+            obs_count = i + 1
+
+            if obs_count < 3:
+                conf_status = f"Pending ({obs_count}/3 hours observed; minimum 3 required)"
+                confirmed_alert = False
+                final_status = "No Alert (Confirmation Pending)"
+                pos_in_window = int(np.sum(raw_positives[:obs_count]))
+            else:
+                window_slice = raw_positives[i - 2:i + 1]
+                pos_in_window = int(np.sum(window_slice))
+                confirmed_alert = bool(pos_in_window >= 2)
+                if confirmed_alert:
+                    conf_status = f"Confirmed ({pos_in_window}/3 hours >= threshold)"
+                    final_status = "CRITICAL ALERT: SEPSIS RISK CONFIRMED"
+                else:
+                    conf_status = f"Unconfirmed ({pos_in_window}/3 hours >= threshold)"
+                    final_status = "Monitoring: No Confirmed Alert"
+
+            vitals_at_h = {k: _number(rows[i].get(k)) for k in VITALS if k in rows[i]}
+            hourly_records.append({
+                "hour": h_val,
+                "model_score": score,
+                "threshold": threshold,
+                "single_hour_status": "High Risk (Above Threshold)" if single_pos else "Low Risk (Below Threshold)",
+                "raw_above_threshold": single_pos,
+                "observations_available": obs_count,
+                "positives_in_window": pos_in_window,
+                "confirmation_status": conf_status,
+                "confirmed_alert": confirmed_alert,
+                "final_status": final_status,
+                "vitals": vitals_at_h,
+            })
+
+        # SHAP feature contributions for the latest hour
+        latest_values = values[-1:, :]
+        explained = compute_contributions(bundle["booster"], latest_values, bundle["features"])
+        latest_prob = float(explained["probabilities"][0])
+        shap_values = explained["values"][0]
+        ordering = np.argsort(-np.abs(shap_values), kind="stable")
+        contributions = [{
+            "feature": bundle["features"][idx],
+            "feature_value": float(latest_values[0, idx]),
+            "shap_value": float(shap_values[idx]),
+            "direction": "positive" if shap_values[idx] > 0 else "negative" if shap_values[idx] < 0 else "zero"
+        } for idx in ordering]
+
+        latest_record = hourly_records[-1]
+
+        # Measurements provenance for the latest hour
+        current_row = frame.iloc[-1]
+        model_row = processed.iloc[-1]
+        measurements = []
+        for name in predictors:
+            if name in ("Age", "Gender", "Unit1", "Unit2", "HospAdmTime", "ICULOS"):
+                continue
+            observed = frame.loc[frame[name].notna(), ["ICULOS", name]]
+            last_hour = float(observed["ICULOS"].iloc[-1]) if len(observed) else None
+            last_value = _number(observed[name].iloc[-1]) if len(observed) else None
+            missing = bool(pd.isna(current_row[name]))
+            elapsed = float(latest_record["hour"] - last_hour) if last_hour is not None else None
+            carried = (missing and name in self.pipeline_config["forward_fill_features"]
+                       and elapsed is not None and elapsed <= self.pipeline_config["forward_fill_limit_hours"])
+            source = "observed" if not missing else "forward_filled" if carried else "training_imputed"
+            measurements.append({
+                "feature": name,
+                "unit": UNITS.get(name),
+                "raw_value": _number(current_row[name]),
+                "model_value": _number(model_row.get(name)),
+                "missing": missing,
+                "source": source,
+                "last_observed_hour": last_hour,
+                "last_observed_value": last_value,
+                "hours_since_observed": elapsed,
+                "included_in_model": name in bundle["features"],
+            })
+
+        result = {
+            "mode": "manual_assessment",
+            "patient_id": "MANUAL_PATIENT",
+            "model": {k: bundle[k] for k in ("id", "name", "feature_count", "best_iteration", "calibrated")},
+            "threshold": threshold,
+            "threshold_formatted": f"{threshold:.6f}",
+            "total_observations": n_obs,
+            "latest_hour": latest_record["hour"],
+            "latest_score": latest_record["model_score"],
+            "latest_prediction_status": latest_record["single_hour_status"],
+            "latest_confirmation_status": latest_record["confirmation_status"],
+            "latest_confirmed_alert": latest_record["confirmed_alert"],
+            "latest_final_status": latest_record["final_status"],
+            "hourly_assessments": hourly_records,
+            "score_history": [{
+                "hour": r["hour"],
+                "model_score": r["model_score"],
+                "threshold": r["threshold"],
+                "alert": r["raw_above_threshold"],
+                "confirmed_alert": r["confirmed_alert"]
+            } for r in hourly_records],
+            "shap": {
+                "base_value": float(explained["base_values"][0]),
+                "margin": float(explained["margins"][0]),
+                "probability": latest_prob,
+                "units": "log_odds",
+                "max_additivity_error": explained["max_additivity_error"],
+                "features": contributions,
+                "positive": sorted((r for r in contributions if r["shap_value"] > 0), key=lambda r: -r["shap_value"]),
+                "negative": sorted((r for r in contributions if r["shap_value"] < 0), key=lambda r: r["shap_value"]),
+            },
+            "measurements": measurements,
+        }
+        json.dumps(result, allow_nan=False)
+        return result
+

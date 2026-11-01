@@ -20,13 +20,21 @@
       <span>SepsiAlert<span class="brand-light"></span><small>SEPSIS RESEARCH WORKSPACE</small></span>
     </a>
     <div class="header-context">
+      <nav class="mode-nav" aria-label="Dashboard view selection">
+        <button id="nav-replay-btn" class="mode-tab active" type="button" aria-selected="true">
+          <span aria-hidden="true">🕒</span> Retrospective Replay
+        </button>
+        <button id="nav-manual-btn" class="mode-tab" type="button" aria-selected="false">
+          <span aria-hidden="true">🩺</span> Manual Patient Assessment
+        </button>
+      </nav>
       <button id="study-modal-btn" class="button button-study" type="button">📊 Comparative Study</button>
       <span class="header-divider"></span><span class="status-dot"></span> Simulated patient timeline <span
         class="header-divider"></span><span class="research-badge">RESEARCH PROTOTYPE</span></div>
   </header>
 
 
-  <div class="workspace">
+  <div class="workspace" id="replay-workspace">
     <aside class="patient-panel" aria-label="Patient selection">
       <div class="section-eyebrow">EXPLORE A RECORD</div>
       <h2>Patient library</h2>
@@ -312,6 +320,226 @@
       <footer class="page-footer"><span>PhysioNet / CinC 2019 · Research data</span><span>Simulated ICU replay · No
           treatment recommendations</span></footer>
     </main>
+  </div>
+
+  <div id="manual-workspace" class="manual-workspace" hidden>
+    <section class="manual-header-card card">
+      <div class="manual-header-content">
+        <div class="section-eyebrow">LIVE RESEARCH INFERENCE · CAUSAL FEATURE PIPELINE</div>
+        <h1>Manual Patient Assessment</h1>
+        <p class="muted">Enter patient demographics and hourly vital signs or laboratory measurements. The system executes the exact PhysioNet causal feature pipeline and scores data using the frozen XGBoost baseline model under the Experiment 5 temporal confirmation policy.</p>
+        <div class="disclaimer-banner">
+          <span class="disclaimer-icon">ℹ️</span>
+          <span><strong>Research Prototype:</strong> Demonstrates real-time model inference on user-entered PhysioNet variables. Frozen threshold = <strong>0.814708</strong>. Does not constitute clinical validation or hospital integration.</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="manual-layout-grid">
+      <!-- Left Column: Inputs -->
+      <div class="manual-input-col">
+        <!-- 1. Demographics & Controls -->
+        <article class="card manual-card">
+          <div class="card-heading">
+            <div>
+              <h2>1. Patient Demographics &amp; Clinical Context</h2>
+              <p class="small muted">Baseline clinical and ICU admission variables</p>
+            </div>
+            <div class="preset-buttons">
+              <button id="man-load-septic-btn" class="button button-preset" type="button" title="Load a deteriorating 3-hour septic case">⚡ Load Septic Case</button>
+              <button id="man-load-stable-btn" class="button button-preset" type="button" title="Load a 3-hour normal vital signs case">🌿 Load Stable Case</button>
+              <button id="man-reset-btn" class="button button-secondary" type="button" title="Clear all entered data">↺ Reset Patient</button>
+            </div>
+          </div>
+          <div class="manual-form-grid">
+            <div class="form-group">
+              <label for="man-age">Age <span class="field-unit">(years)</span></label>
+              <input id="man-age" type="number" min="0" max="120" step="1" placeholder="e.g. 68">
+              <span class="field-hint">Range: 0–120</span>
+            </div>
+            <div class="form-group">
+              <label for="man-gender">Gender</label>
+              <select id="man-gender">
+                <option value="">Unrecorded (NaN)</option>
+                <option value="1">Male (1)</option>
+                <option value="0">Female (0)</option>
+              </select>
+              <span class="field-hint">0=Female, 1=Male</span>
+            </div>
+            <div class="form-group">
+              <label for="man-unit">ICU Unit Type</label>
+              <select id="man-unit">
+                <option value="none">Unrecorded (NaN)</option>
+                <option value="unit1">Medical ICU (Unit1 = 1)</option>
+                <option value="unit2">Surgical ICU (Unit2 = 1)</option>
+              </select>
+              <span class="field-hint">Unit1 (MICU) / Unit2 (SICU)</span>
+            </div>
+            <div class="form-group">
+              <label for="man-hospadm">Hospital Admission Time <span class="field-unit">(hours)</span></label>
+              <input id="man-hospadm" type="number" step="0.1" placeholder="e.g. -14.0">
+              <span class="field-hint">Hours before ICU admission (&le; 0)</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Hourly Observations -->
+        <article class="card manual-card">
+          <div class="card-heading">
+            <div>
+              <h2>2. Hourly Observations (PhysioNet Features)</h2>
+              <p class="small muted">Experiment 5 requires at least <strong>3 hourly observations</strong> for temporal confirmation (2 of 3h &ge; 0.814708).</p>
+            </div>
+            <button id="man-add-hour-btn" class="button button-secondary" type="button">+ Add Next Hour</button>
+          </div>
+
+          <div id="man-hours-container" class="manual-hours-container">
+            <!-- Dynamically populated hourly observation cards -->
+          </div>
+
+          <div class="manual-action-bar">
+            <button id="man-assess-btn" class="button button-primary button-large" type="button">
+              <span>▶</span> Run Risk Assessment
+            </button>
+            <button id="man-clear-btn" class="button button-secondary" type="button">Clear Inputs</button>
+            <span id="man-run-status" class="small muted">Ready to evaluate</span>
+          </div>
+
+          <div id="man-error-panel" class="error-panel" role="alert" hidden>
+            <div>
+              <strong id="man-error-title">Validation Error</strong>
+              <p id="man-error-message"></p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Right Column: Assessment Results -->
+      <div class="manual-results-col">
+        <!-- Executive Summary -->
+        <article class="card score-card manual-result-card" id="man-summary-card">
+          <div class="card-heading">
+            <div class="section-eyebrow">EXPERIMENT 5 ASSESSMENT SUMMARY</div>
+            <span id="man-badge-status" class="pill pill-neutral">Awaiting assessment</span>
+          </div>
+
+          <div class="score-value">
+            <span id="man-score-display">—</span>
+            <span class="score-scale">/ 1.000</span>
+          </div>
+
+          <div class="score-meter" aria-hidden="true">
+            <div id="man-meter-bar"></div>
+            <span id="man-threshold-tick" style="left: 81.47%;"></span>
+          </div>
+
+          <div class="threshold-description">
+            <span>Frozen Decision Threshold</span>
+            <strong>0.814708</strong>
+          </div>
+
+          <div class="status-summary-grid">
+            <div class="status-summary-item">
+              <span class="small muted">Single-Hour Status</span>
+              <strong id="man-single-status">—</strong>
+            </div>
+            <div class="status-summary-item">
+              <span class="small muted">Temporal Confirmation</span>
+              <strong id="man-confirm-status">—</strong>
+            </div>
+            <div class="status-summary-item span-full">
+              <span class="small muted">Final Alert Status</span>
+              <div id="man-final-alert" class="final-alert-box">—</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Hourly Trajectory Table -->
+        <article class="card manual-result-card" id="man-trajectory-card">
+          <div class="card-heading">
+            <div>
+              <h2>Hourly Trajectory &amp; Confirmation Table</h2>
+              <p class="small muted">Hourly scores evaluated against the 3-hour confirmation window</p>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table class="trajectory-table">
+              <thead>
+                <tr>
+                  <th>Hour</th>
+                  <th class="numeric">Score</th>
+                  <th>Single Status</th>
+                  <th>3h Window</th>
+                  <th>Confirmation</th>
+                  <th>Alert</th>
+                </tr>
+              </thead>
+              <tbody id="man-trajectory-tbody">
+                <tr>
+                  <td colspan="6" class="table-empty">Add observations and run assessment to see trajectory.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <!-- SHAP Explanation Card -->
+        <article class="card explanation-card manual-result-card" id="man-shap-card">
+          <div class="card-heading">
+            <div>
+              <div class="section-eyebrow">WHY THIS SCORE? (NATIVE TREESHAP)</div>
+              <h2>Latest-Hour Feature Contributions</h2>
+              <p class="small muted">Exact TreeSHAP contributions in log-odds for the latest evaluated hour.</p>
+            </div>
+            <span class="pill pill-neutral">SHAP · LOG-ODDS</span>
+          </div>
+
+          <div class="shap-grid">
+            <div>
+              <h3><span class="direction-dot negative"></span>Lower the model score</h3>
+              <div id="man-shap-negative" class="shap-bars">
+                <p class="small muted">Awaiting assessment…</p>
+              </div>
+            </div>
+            <div>
+              <h3><span class="direction-dot positive"></span>Raise the model score</h3>
+              <div id="man-shap-positive" class="shap-bars">
+                <p class="small muted">Awaiting assessment…</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="shap-equation">
+            <span>Model baseline <strong id="man-shap-base">—</strong></span>
+            <span aria-hidden="true">+</span>
+            <span>All feature contributions <strong id="man-shap-total">—</strong></span>
+            <span aria-hidden="true">=</span>
+            <span>Raw model output <strong id="man-shap-margin">—</strong></span>
+          </div>
+
+          <details class="all-features">
+            <summary><span>View all feature contributions &amp; values</span></summary>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th class="numeric">Value</th>
+                    <th class="numeric">SHAP Value</th>
+                    <th>Direction</th>
+                  </tr>
+                </thead>
+                <tbody id="man-shap-all-table"></tbody>
+              </table>
+            </div>
+          </details>
+        </article>
+      </div>
+    </div>
+    <footer class="page-footer">
+      <span>PhysioNet / CinC 2019 · Research data</span>
+      <span>Simulated ICU Assessment · No treatment recommendations</span>
+    </footer>
   </div>
 
   <div id="study-modal" class="modal-backdrop" hidden>

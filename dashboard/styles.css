@@ -2173,3 +2173,317 @@ tr:last-child td {
   display: flex;
   justify-content: flex-end;
 }
+
+/* ==========================================================================
+   Manual Patient Assessment & Mode Navigation Styles
+   ========================================================================== */
+
+/* Mode Navigation (Header Tabs) */
+.mode-nav {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9px;
+  padding: 3px;
+  gap: 4px;
+}
+.mode-tab {
+  background: transparent;
+  color: #c0d3df;
+  border: none;
+  border-radius: 7px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+.mode-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.mode-tab.active {
+  background: var(--teal);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Manual Assessment Layout */
+.manual-workspace {
+  max-width: 1780px;
+  margin: auto;
+  padding: 24px 32px 48px;
+}
+.manual-header-card {
+  margin-bottom: 24px;
+  background: #ffffff;
+  padding: 24px 28px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.manual-header-content h1 {
+  font-size: 26px;
+  margin: 6px 0 8px;
+  color: var(--navy);
+}
+.manual-header-content p {
+  color: var(--muted);
+  max-width: 980px;
+  margin-bottom: 14px;
+  font-size: 13.5px;
+}
+.disclaimer-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fdfaf3;
+  border: 1px solid #fae8c8;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 12px;
+  color: #7b581c;
+}
+.manual-layout-grid {
+  display: grid;
+  grid-template-columns: minmax(540px, 1.15fr) minmax(460px, 0.85fr);
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .manual-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Form Cards & Inputs */
+.manual-card {
+  margin-bottom: 24px;
+  padding: 22px 24px;
+  background: #fff;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.manual-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+  margin-top: 14px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.form-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.field-unit {
+  font-weight: 400;
+  color: var(--muted);
+}
+.field-hint {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.preset-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.button-preset {
+  background: #f0f5f8;
+  color: var(--navy);
+  border: 1px solid #d4e0e8;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.button-preset:hover {
+  background: #e2ecf2;
+}
+
+/* Hourly Observation Cards */
+.manual-hours-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 18px;
+}
+.hour-observation-card {
+  background: #fbfdfe;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  transition: border-color 0.15s ease;
+}
+.hour-observation-card:focus-within {
+  border-color: #9cd5cc;
+}
+.hour-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eef3f6;
+}
+.hour-badge {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--navy);
+  background: #e6f3f0;
+  padding: 3px 10px;
+  border-radius: 6px;
+}
+.button-remove-hour {
+  background: transparent;
+  color: #a84234;
+  border: 1px solid #f0cdc7;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.button-remove-hour:hover {
+  background: #fcebe8;
+}
+.vitals-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+}
+.vitals-form-grid .form-group input {
+  padding: 6px 8px;
+  font-size: 13px;
+}
+.labs-details {
+  margin-top: 14px;
+  background: #f4f8fa;
+  border-radius: 8px;
+  padding: 10px 14px;
+  border: 1px dashed #cedde5;
+}
+.labs-details summary {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy);
+  cursor: pointer;
+  outline: none;
+}
+.labs-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.labs-form-grid .form-group input {
+  padding: 5px 8px;
+  font-size: 12.5px;
+  background: #ffffff;
+}
+.manual-action-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.button-large {
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 700;
+}
+input.input-invalid {
+  border-color: #d94f3d !important;
+  background-color: #fff8f7 !important;
+}
+
+/* Results & Summary */
+.manual-result-card {
+  margin-bottom: 24px;
+}
+.status-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #ebf1f4;
+}
+.status-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.status-summary-item.span-full {
+  grid-column: 1 / -1;
+}
+.final-alert-box {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13.5px;
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+.final-alert-box.alert-confirmed {
+  background: #fde8e5;
+  color: #ab281a;
+  border: 1px solid #f6b5ac;
+  box-shadow: 0 2px 8px rgba(195, 93, 79, 0.15);
+}
+.final-alert-box.alert-pending {
+  background: #fdf5e2;
+  color: #8c6010;
+  border: 1px solid #f7dfa7;
+}
+.final-alert-box.alert-unconfirmed {
+  background: #e9f6f2;
+  color: #0b6a5b;
+  border: 1px solid #b8e4d8;
+}
+.trajectory-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.trajectory-table th {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+  color: var(--muted);
+  font-weight: 600;
+}
+.trajectory-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eef2f5;
+}
+.trajectory-table tr:hover td {
+  background: #f9fbfc;
+}
+.pill-danger {
+  background: #fee9e7;
+  color: #bd3122;
+  border: 1px solid #f9c0b8;
+}
+.pill-warning {
+  background: #fef7e3;
+  color: #9e6d0a;
+  border: 1px solid #fae4a7;
+}
+.pill-success {
+  background: #ebf7f3;
+  color: #127a69;
+  border: 1px solid #bfe7dc;
+}

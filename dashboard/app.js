@@ -732,6 +732,525 @@
     pause(); abort(state.activeSnapshot?.controller); abort(state.patientController); abort(state.searchController); abort(state.reviewController);
   });
 
+  /* ==========================================================================
+     Manual Patient Assessment Feature Implementation
+     ========================================================================== */
+  const RANGES = {
+    Age: [0, 120, "years"],
+    Gender: [0, 1, "0=Female, 1=Male"],
+    Unit1: [0, 1, "0 or 1"],
+    Unit2: [0, 1, "0 or 1"],
+    HospAdmTime: [-10000, 240, "hours"],
+    ICULOS: [1, 2000, "hours"],
+    HR: [20, 300, "bpm"],
+    O2Sat: [20, 100, "%"],
+    Temp: [20, 48, "°C"],
+    SBP: [20, 300, "mmHg"],
+    MAP: [10, 300, "mmHg"],
+    DBP: [10, 250, "mmHg"],
+    Resp: [1, 100, "breaths/min"],
+    EtCO2: [5, 120, "mmHg"],
+    BaseExcess: [-50, 100, "mEq/L"],
+    HCO3: [0, 60, "mEq/L"],
+    FiO2: [0, 1, "0.0–1.0"],
+    pH: [6.5, 8.0, "pH"],
+    PaCO2: [5, 150, "mmHg"],
+    SaO2: [20, 100, "%"],
+    AST: [1, 15000, "IU/L"],
+    BUN: [1, 300, "mg/dL"],
+    Alkalinephos: [1, 5000, "IU/L"],
+    Calcium: [1, 30, "mg/dL"],
+    Chloride: [20, 180, "mEq/L"],
+    Creatinine: [0.1, 50, "mg/dL"],
+    Bilirubin_direct: [0, 50, "mg/dL"],
+    Glucose: [10, 1500, "mg/dL"],
+    Lactate: [0.1, 40, "mmol/L"],
+    Magnesium: [0.1, 15, "mg/dL"],
+    Phosphate: [0.1, 30, "mg/dL"],
+    Potassium: [1, 15, "mEq/L"],
+    Bilirubin_total: [0.1, 60, "mg/dL"],
+    TroponinI: [0, 500, "ng/mL"],
+    Hct: [5, 75, "%"],
+    Hgb: [1, 35, "g/dL"],
+    PTT: [10, 300, "seconds"],
+    WBC: [0.1, 500, "10^3/µL"],
+    Fibrinogen: [10, 2000, "mg/dL"],
+    Platelets: [1, 3000, "10^3/µL"],
+  };
+
+  const manualState = {
+    hours: [
+      { ICULOS: 1, HR: "", O2Sat: "", Temp: "", SBP: "", MAP: "", DBP: "", Resp: "", EtCO2: "", WBC: "", Lactate: "", Creatinine: "", Platelets: "", Glucose: "", BUN: "" },
+      { ICULOS: 2, HR: "", O2Sat: "", Temp: "", SBP: "", MAP: "", DBP: "", Resp: "", EtCO2: "", WBC: "", Lactate: "", Creatinine: "", Platelets: "", Glucose: "", BUN: "" },
+      { ICULOS: 3, HR: "", O2Sat: "", Temp: "", SBP: "", MAP: "", DBP: "", Resp: "", EtCO2: "", WBC: "", Lactate: "", Creatinine: "", Platelets: "", Glucose: "", BUN: "" },
+    ],
+    assessment: null,
+  };
+
+  const PRESET_SEPTIC = {
+    demographics: { Age: 68, Gender: "1", Unit: "unit1", HospAdmTime: -14.0 },
+    hours: [
+      { ICULOS: 1, HR: 88, O2Sat: 97, Temp: 37.2, SBP: 122, MAP: 82, DBP: 64, Resp: 18, EtCO2: "", WBC: 10.5, Lactate: 1.4, Creatinine: 0.9, Platelets: 210, Glucose: 115, BUN: 16 },
+      { ICULOS: 2, HR: 110, O2Sat: 94, Temp: 38.6, SBP: 102, MAP: 68, DBP: 52, Resp: 24, EtCO2: "", WBC: 15.2, Lactate: 2.5, Creatinine: 1.3, Platelets: 180, Glucose: 145, BUN: 22 },
+      { ICULOS: 3, HR: 126, O2Sat: 91, Temp: 39.2, SBP: 88, MAP: 58, DBP: 46, Resp: 28, EtCO2: "", WBC: 21.0, Lactate: 3.8, Creatinine: 1.8, Platelets: 145, Glucose: 175, BUN: 28 },
+    ],
+  };
+
+  const PRESET_STABLE = {
+    demographics: { Age: 52, Gender: "0", Unit: "unit2", HospAdmTime: -3.5 },
+    hours: [
+      { ICULOS: 1, HR: 72, O2Sat: 99, Temp: 36.8, SBP: 124, MAP: 85, DBP: 66, Resp: 15, EtCO2: "", WBC: 7.8, Lactate: 1.1, Creatinine: 0.8, Platelets: 240, Glucose: 98, BUN: 14 },
+      { ICULOS: 2, HR: 76, O2Sat: 98, Temp: 36.9, SBP: 120, MAP: 83, DBP: 65, Resp: 16, EtCO2: "", WBC: 8.0, Lactate: 1.2, Creatinine: 0.8, Platelets: 235, Glucose: 102, BUN: 14 },
+      { ICULOS: 3, HR: 72, O2Sat: 99, Temp: 36.8, SBP: 122, MAP: 84, DBP: 65, Resp: 15, EtCO2: "", WBC: 7.9, Lactate: 1.1, Creatinine: 0.8, Platelets: 238, Glucose: 99, BUN: 15 },
+    ],
+  };
+
+  function setMode(mode) {
+    const navReplayBtn = $("nav-replay-btn");
+    const navManualBtn = $("nav-manual-btn");
+    const replayWorkspace = $("replay-workspace");
+    const manualWorkspace = $("manual-workspace");
+
+    if (mode === "manual") {
+      navReplayBtn.classList.remove("active");
+      navReplayBtn.setAttribute("aria-selected", "false");
+      navManualBtn.classList.add("active");
+      navManualBtn.setAttribute("aria-selected", "true");
+      replayWorkspace.hidden = true;
+      manualWorkspace.hidden = false;
+      pause();
+    } else {
+      navManualBtn.classList.remove("active");
+      navManualBtn.setAttribute("aria-selected", "false");
+      navReplayBtn.classList.add("active");
+      navReplayBtn.setAttribute("aria-selected", "true");
+      manualWorkspace.hidden = true;
+      replayWorkspace.hidden = false;
+    }
+  }
+
+  function showManualError(message, title = "Validation Error") {
+    $("man-error-title").textContent = title;
+    $("man-error-message").textContent = message;
+    $("man-error-panel").hidden = false;
+    $("man-run-status").textContent = "Error occurred";
+  }
+
+  function clearManualError() {
+    $("man-error-panel").hidden = true;
+    $("man-run-status").textContent = "Ready to evaluate";
+    document.querySelectorAll(".input-invalid").forEach(el => el.classList.remove("input-invalid"));
+  }
+
+  function renderManualHours() {
+    const container = $("man-hours-container");
+    container.innerHTML = "";
+
+    manualState.hours.forEach((h, index) => {
+      const card = document.createElement("div");
+      card.className = "hour-observation-card";
+      card.dataset.index = index;
+
+      card.innerHTML = `
+        <div class="hour-card-header">
+          <span class="hour-badge">ICU Observation #${index + 1} (Hour ${h.ICULOS})</span>
+          <button class="button-remove-hour" type="button" data-index="${index}" ${manualState.hours.length <= 1 ? "disabled" : ""}>
+            ✕ Remove Hour
+          </button>
+        </div>
+        <div class="vitals-form-grid">
+          <div class="form-group">
+            <label>HR <span class="field-unit">(bpm)</span></label>
+            <input type="number" step="1" data-field="HR" data-index="${index}" value="${esc(h.HR)}" placeholder="80">
+            <span class="field-hint">20–300</span>
+          </div>
+          <div class="form-group">
+            <label>O2Sat <span class="field-unit">(%)</span></label>
+            <input type="number" step="0.5" data-field="O2Sat" data-index="${index}" value="${esc(h.O2Sat)}" placeholder="98">
+            <span class="field-hint">20–100</span>
+          </div>
+          <div class="form-group">
+            <label>Temp <span class="field-unit">(°C)</span></label>
+            <input type="number" step="0.1" data-field="Temp" data-index="${index}" value="${esc(h.Temp)}" placeholder="37.0">
+            <span class="field-hint">20–48</span>
+          </div>
+          <div class="form-group">
+            <label>SBP <span class="field-unit">(mmHg)</span></label>
+            <input type="number" step="1" data-field="SBP" data-index="${index}" value="${esc(h.SBP)}" placeholder="120">
+            <span class="field-hint">20–300</span>
+          </div>
+          <div class="form-group">
+            <label>MAP <span class="field-unit">(mmHg)</span></label>
+            <input type="number" step="1" data-field="MAP" data-index="${index}" value="${esc(h.MAP)}" placeholder="80">
+            <span class="field-hint">10–300</span>
+          </div>
+          <div class="form-group">
+            <label>DBP <span class="field-unit">(mmHg)</span></label>
+            <input type="number" step="1" data-field="DBP" data-index="${index}" value="${esc(h.DBP)}" placeholder="65">
+            <span class="field-hint">10–250</span>
+          </div>
+          <div class="form-group">
+            <label>Resp <span class="field-unit">(/min)</span></label>
+            <input type="number" step="1" data-field="Resp" data-index="${index}" value="${esc(h.Resp)}" placeholder="18">
+            <span class="field-hint">1–100</span>
+          </div>
+          <div class="form-group">
+            <label>EtCO2 <span class="field-unit">(mmHg)</span></label>
+            <input type="number" step="1" data-field="EtCO2" data-index="${index}" value="${esc(h.EtCO2)}" placeholder="35">
+            <span class="field-hint">5–120</span>
+          </div>
+        </div>
+        <details class="labs-details">
+          <summary>Laboratory Values (Optional · training median imputed if blank)</summary>
+          <div class="labs-form-grid">
+            <div class="form-group">
+              <label>WBC <span class="field-unit">(10³/µL)</span></label>
+              <input type="number" step="0.1" data-field="WBC" data-index="${index}" value="${esc(h.WBC)}" placeholder="10.0">
+            </div>
+            <div class="form-group">
+              <label>Lactate <span class="field-unit">(mmol/L)</span></label>
+              <input type="number" step="0.1" data-field="Lactate" data-index="${index}" value="${esc(h.Lactate)}" placeholder="1.8">
+            </div>
+            <div class="form-group">
+              <label>Creatinine <span class="field-unit">(mg/dL)</span></label>
+              <input type="number" step="0.1" data-field="Creatinine" data-index="${index}" value="${esc(h.Creatinine)}" placeholder="1.0">
+            </div>
+            <div class="form-group">
+              <label>Platelets <span class="field-unit">(10³/µL)</span></label>
+              <input type="number" step="1" data-field="Platelets" data-index="${index}" value="${esc(h.Platelets)}" placeholder="180">
+            </div>
+            <div class="form-group">
+              <label>Glucose <span class="field-unit">(mg/dL)</span></label>
+              <input type="number" step="1" data-field="Glucose" data-index="${index}" value="${esc(h.Glucose)}" placeholder="120">
+            </div>
+            <div class="form-group">
+              <label>BUN <span class="field-unit">(mg/dL)</span></label>
+              <input type="number" step="1" data-field="BUN" data-index="${index}" value="${esc(h.BUN)}" placeholder="18">
+            </div>
+            <div class="form-group">
+              <label>pH</label>
+              <input type="number" step="0.01" data-field="pH" data-index="${index}" value="${esc(h.pH)}" placeholder="7.40">
+            </div>
+            <div class="form-group">
+              <label>FiO2 <span class="field-unit">(0.0–1.0)</span></label>
+              <input type="number" step="0.05" data-field="FiO2" data-index="${index}" value="${esc(h.FiO2)}" placeholder="0.5">
+            </div>
+          </div>
+        </details>
+      `;
+
+      container.appendChild(card);
+    });
+
+    // Attach input listeners
+    container.querySelectorAll("input[data-field]").forEach(input => {
+      input.addEventListener("input", e => {
+        const idx = Number(e.target.dataset.index);
+        const fld = e.target.dataset.field;
+        manualState.hours[idx][fld] = e.target.value.trim();
+        e.target.classList.remove("input-invalid");
+      });
+    });
+
+    // Attach remove buttons
+    container.querySelectorAll(".button-remove-hour").forEach(btn => {
+      btn.addEventListener("click", e => {
+        const idx = Number(e.target.dataset.index);
+        if (manualState.hours.length > 1) {
+          manualState.hours.splice(idx, 1);
+          // Re-index ICULOS
+          manualState.hours.forEach((h, i) => { h.ICULOS = i + 1; });
+          renderManualHours();
+          clearManualError();
+        }
+      });
+    });
+  }
+
+  function applyPreset(preset) {
+    clearManualError();
+    $("man-age").value = preset.demographics.Age;
+    $("man-gender").value = preset.demographics.Gender;
+    $("man-unit").value = preset.demographics.Unit;
+    $("man-hospadm").value = preset.demographics.HospAdmTime;
+
+    manualState.hours = JSON.parse(JSON.stringify(preset.hours));
+    renderManualHours();
+    $("man-run-status").textContent = "Preset loaded. Click 'Run Risk Assessment' to evaluate.";
+  }
+
+  function resetManualPatient() {
+    clearManualError();
+    $("man-age").value = "";
+    $("man-gender").value = "";
+    $("man-unit").value = "none";
+    $("man-hospadm").value = "";
+
+    manualState.hours = [
+      { ICULOS: 1, HR: "", O2Sat: "", Temp: "", SBP: "", MAP: "", DBP: "", Resp: "", EtCO2: "", WBC: "", Lactate: "", Creatinine: "", Platelets: "", Glucose: "", BUN: "" },
+      { ICULOS: 2, HR: "", O2Sat: "", Temp: "", SBP: "", MAP: "", DBP: "", Resp: "", EtCO2: "", WBC: "", Lactate: "", Creatinine: "", Platelets: "", Glucose: "", BUN: "" },
+      { ICULOS: 3, HR: "", O2Sat: "", Temp: "", SBP: "", MAP: "", DBP: "", Resp: "", EtCO2: "", WBC: "", Lactate: "", Creatinine: "", Platelets: "", Glucose: "", BUN: "" },
+    ];
+    renderManualHours();
+
+    // Reset results card
+    $("man-score-display").textContent = "—";
+    $("man-meter-bar").style.width = "0%";
+    $("man-meter-bar").className = "";
+    $("man-badge-status").textContent = "Awaiting assessment";
+    $("man-badge-status").className = "pill pill-neutral";
+    $("man-single-status").textContent = "—";
+    $("man-confirm-status").textContent = "—";
+    $("man-final-alert").textContent = "—";
+    $("man-final-alert").className = "final-alert-box";
+
+    $("man-trajectory-tbody").innerHTML = `<tr><td colspan="6" class="table-empty">Add observations and run assessment to see trajectory.</td></tr>`;
+    $("man-shap-negative").innerHTML = `<p class="small muted">Awaiting assessment…</p>`;
+    $("man-shap-positive").innerHTML = `<p class="small muted">Awaiting assessment…</p>`;
+    $("man-shap-base").textContent = "—";
+    $("man-shap-margin").textContent = "—";
+    $("man-shap-total").textContent = "—";
+    $("man-shap-all-table").innerHTML = "";
+
+    $("man-run-status").textContent = "Data reset. Enter patient information to evaluate.";
+  }
+
+  async function runManualAssessment() {
+    clearManualError();
+
+    // 1. Client-side input validation
+    const ageVal = $("man-age").value.trim();
+    if (ageVal !== "") {
+      const num = Number(ageVal);
+      if (isNaN(num) || num < RANGES.Age[0] || num > RANGES.Age[1]) {
+        $("man-age").classList.add("input-invalid");
+        showManualError(`Age must be between ${RANGES.Age[0]} and ${RANGES.Age[1]} years.`);
+        return;
+      }
+    }
+
+    const hospVal = $("man-hospadm").value.trim();
+    if (hospVal !== "") {
+      const num = Number(hospVal);
+      if (isNaN(num) || num < RANGES.HospAdmTime[0] || num > RANGES.HospAdmTime[1]) {
+        $("man-hospadm").classList.add("input-invalid");
+        showManualError(`Hospital Admission Time must be between ${RANGES.HospAdmTime[0]} and ${RANGES.HospAdmTime[1]} hours.`);
+        return;
+      }
+    }
+
+    // Validate hourly vitals & labs
+    for (let i = 0; i < manualState.hours.length; i++) {
+      const h = manualState.hours[i];
+      for (const [field, val] of Object.entries(h)) {
+        if (field === "ICULOS") continue;
+        if (val !== "" && val !== null && val !== undefined) {
+          const num = Number(val);
+          const range = RANGES[field];
+          if (isNaN(num)) {
+            const inputEl = document.querySelector(`input[data-field="${field}"][data-index="${i}"]`);
+            if (inputEl) inputEl.classList.add("input-invalid");
+            showManualError(`Observation #${i + 1}: ${field} must be a valid number.`);
+            return;
+          }
+          if (range && (num < range[0] || num > range[1])) {
+            const inputEl = document.querySelector(`input[data-field="${field}"][data-index="${i}"]`);
+            if (inputEl) inputEl.classList.add("input-invalid");
+            showManualError(`Observation #${i + 1}: ${field} (${num}) is outside plausible range [${range[0]}, ${range[1]}] ${range[2]}.`);
+            return;
+          }
+        }
+      }
+    }
+
+    // Build payload
+    const payload = {
+      model: "baseline",
+      demographics: {
+        Age: ageVal !== "" ? Number(ageVal) : null,
+        Gender: $("man-gender").value !== "" ? Number($("man-gender").value) : null,
+        Unit1: $("man-unit").value === "unit1" ? 1 : $("man-unit").value === "unit2" ? 0 : null,
+        Unit2: $("man-unit").value === "unit2" ? 1 : $("man-unit").value === "unit1" ? 0 : null,
+        HospAdmTime: hospVal !== "" ? Number(hospVal) : null,
+      },
+      hours: manualState.hours.map((h, i) => {
+        const row = { ICULOS: Number(h.ICULOS || (i + 1)) };
+        for (const [k, v] of Object.entries(h)) {
+          if (k !== "ICULOS" && v !== "" && v !== null && v !== undefined) {
+            row[k] = Number(v);
+          }
+        }
+        return row;
+      })
+    };
+
+    $("man-assess-btn").disabled = true;
+    $("man-run-status").textContent = "Running feature engineering and XGBoost inference…";
+
+    try {
+      const response = await fetch("/api/manual-assessment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const res = await response.json();
+      if (!response.ok) {
+        throw new Error(res.error || `Server returned error status ${response.status}`);
+      }
+
+      renderManualResults(res);
+      $("man-run-status").textContent = `Assessment complete at Hour ${res.latest_hour}.`;
+    } catch (err) {
+      showManualError(err.message || String(err), "Inference Error");
+    } finally {
+      $("man-assess-btn").disabled = false;
+    }
+  }
+
+  function renderManualResults(res) {
+    manualState.assessment = res;
+
+    // 1. Executive Summary Card
+    const score = res.latest_score;
+    const threshold = res.threshold;
+    $("man-score-display").textContent = score.toFixed(3);
+
+    const fillPct = Math.min(100, Math.max(0, score * 100));
+    const meterBar = $("man-meter-bar");
+    meterBar.style.width = `${fillPct}%`;
+
+    const isConfirmed = res.latest_confirmed_alert;
+    const isPending = res.total_observations < 3;
+    const isAboveThresh = score >= threshold;
+
+    if (isConfirmed) {
+      meterBar.className = "fill-critical";
+      $("man-badge-status").textContent = "CONFIRMED ALERT";
+      $("man-badge-status").className = "pill pill-danger";
+    } else if (isPending) {
+      meterBar.className = isAboveThresh ? "fill-warning" : "fill-normal";
+      $("man-badge-status").textContent = "CONFIRMATION PENDING";
+      $("man-badge-status").className = "pill pill-warning";
+    } else {
+      meterBar.className = isAboveThresh ? "fill-warning" : "fill-normal";
+      $("man-badge-status").textContent = isAboveThresh ? "ELEVATED (UNCONFIRMED)" : "LOW RISK";
+      $("man-badge-status").className = isAboveThresh ? "pill pill-warning" : "pill pill-positive";
+    }
+
+    $("man-single-status").textContent = res.latest_prediction_status;
+    $("man-confirm-status").textContent = res.latest_confirmation_status;
+
+    const alertBox = $("man-final-alert");
+    if (isConfirmed) {
+      alertBox.className = "final-alert-box alert-confirmed";
+      alertBox.textContent = "🚨 CRITICAL ALERT: SEPSIS RISK CONFIRMED (Experiment 5 Policy)";
+    } else if (isPending) {
+      alertBox.className = "final-alert-box alert-pending";
+      alertBox.textContent = "⏳ TEMPORAL CONFIRMATION PENDING (< 3 hourly observations recorded)";
+    } else {
+      alertBox.className = "final-alert-box alert-unconfirmed";
+      alertBox.textContent = "✅ MONITORING: NO CONFIRMED ALERT (Threshold not sustained)";
+    }
+
+    // 2. Trajectory Table
+    const tbody = $("man-trajectory-tbody");
+    tbody.innerHTML = "";
+
+    res.hourly_assessments.forEach(item => {
+      const tr = document.createElement("tr");
+
+      const pillClass = item.confirmed_alert ? "pill-danger" : item.observations_available < 3 ? "pill-warning" : "pill-success";
+      const alertTag = item.confirmed_alert
+        ? `<span class="pill ${pillClass}">🚨 ALERT</span>`
+        : item.observations_available < 3
+        ? `<span class="pill ${pillClass}">⏳ Pending</span>`
+        : `<span class="pill ${pillClass}">✓ Normal</span>`;
+
+      tr.innerHTML = `
+        <td><strong>Hour ${item.hour}</strong></td>
+        <td class="numeric"><strong>${item.model_score.toFixed(3)}</strong></td>
+        <td><span class="small ${item.raw_above_threshold ? "text-negative" : "muted"}">${item.single_hour_status}</span></td>
+        <td>${item.observations_available >= 3 ? `${item.positives_in_window}/3 &ge; threshold` : `${item.positives_in_window}/${item.observations_available} &ge; threshold`}</td>
+        <td><span class="small">${item.confirmation_status}</span></td>
+        <td>${alertTag}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // 3. SHAP Explanation
+    const shap = res.shap;
+    $("man-shap-base").textContent = signed(shap.base_value);
+    $("man-shap-margin").textContent = signed(shap.margin);
+    const sumShap = shap.features.reduce((acc, f) => acc + f.shap_value, 0);
+    $("man-shap-total").textContent = signed(sumShap);
+
+    function renderShapBars(containerId, list, direction) {
+      const el = $(containerId);
+      el.innerHTML = "";
+      if (!list.length) {
+        el.innerHTML = `<p class="small muted">No ${direction} contributions</p>`;
+        return;
+      }
+      const topItems = list.slice(0, 5);
+      const maxVal = Math.max(...topItems.map(item => Math.abs(item.shap_value)), 0.05);
+
+      topItems.forEach(item => {
+        const pct = Math.min(100, Math.max(5, (Math.abs(item.shap_value) / maxVal) * 100));
+        const barRow = document.createElement("div");
+        barRow.className = "shap-bar-row";
+        barRow.innerHTML = `
+          <div class="shap-bar-label">
+            <span class="small" title="${esc(item.feature)}">${esc(featureName(item.feature))}</span>
+            <span class="small muted">${item.feature_value !== null ? fixed(item.feature_value, 1) : "—"}</span>
+          </div>
+          <div class="shap-bar-track">
+            <div class="shap-bar-fill ${direction}" style="width: ${pct}%;"></div>
+          </div>
+          <span class="shap-bar-value small">${signed(item.shap_value)}</span>
+        `;
+        el.appendChild(barRow);
+      });
+    }
+
+    renderShapBars("man-shap-negative", shap.negative, "negative");
+    renderShapBars("man-shap-positive", shap.positive, "positive");
+
+    // All Features Table
+    const tableBody = $("man-shap-all-table");
+    tableBody.innerHTML = "";
+    shap.features.forEach(f => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${esc(featureName(f.feature))}</td>
+        <td class="numeric">${f.feature_value !== null ? fixed(f.feature_value, 2) : "—"}</td>
+        <td class="numeric">${signed(f.shap_value)}</td>
+        <td><span class="direction-badge ${f.direction}">${f.direction}</span></td>
+      `;
+      tableBody.appendChild(tr);
+    });
+  }
+
+  // Wire up Manual Assessment event listeners
+  $("nav-replay-btn").addEventListener("click", () => setMode("replay"));
+  $("nav-manual-btn").addEventListener("click", () => setMode("manual"));
+  $("man-load-septic-btn").addEventListener("click", () => applyPreset(PRESET_SEPTIC));
+  $("man-load-stable-btn").addEventListener("click", () => applyPreset(PRESET_STABLE));
+  $("man-reset-btn").addEventListener("click", resetManualPatient);
+  $("man-clear-btn").addEventListener("click", resetManualPatient);
+  $("man-assess-btn").addEventListener("click", runManualAssessment);
+  $("man-add-hour-btn").addEventListener("click", () => {
+    const nextHour = manualState.hours.length + 1;
+    manualState.hours.push({
+      ICULOS: nextHour, HR: "", O2Sat: "", Temp: "", SBP: "", MAP: "", DBP: "", Resp: "", EtCO2: "",
+      WBC: "", Lactate: "", Creatinine: "", Platelets: "", Glucose: "", BUN: ""
+    });
+    renderManualHours();
+  });
+
+  // Initialize manual hours table
+  renderManualHours();
+
   async function init() {
     emptyLiveView();
     searchPatients();
