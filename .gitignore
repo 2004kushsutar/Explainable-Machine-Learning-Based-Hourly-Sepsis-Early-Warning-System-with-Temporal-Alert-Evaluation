@@ -24,7 +24,7 @@ reports/output_processing_log.csv
 model_cache/
 model_cache.building-*/
 model_cache.backup-*/
-models/
+# models/
 reports/models/*/*predictions.csv.gz
 reports/models/*/*.log
 reports/shap_xgboost/*.npy
@@ -46,8 +46,8 @@ reports/timing_ablation/C/shap.inprogress-*/
 .ipynb_checkpoints/
 
 # Model binaries (if any) that are not version‑controlled
-*.pkl
-*.h5
+# *.pkl
+# *.h5
 
 # Generic log files (anywhere)
 *.log

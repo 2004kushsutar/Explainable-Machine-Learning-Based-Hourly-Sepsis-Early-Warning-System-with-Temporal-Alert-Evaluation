@@ -1,0 +1,8 @@
+{
+  "threshold": 0.6432190053870606,
+  "validation_f1": 0.1949856144677353,
+  "rule": "maximize validation F1; ties choose highest threshold",
+  "comparison": "probability >= threshold",
+  "validation_samples": 228083,
+  "candidate_thresholds": 223765
+}

@@ -1,0 +1,100 @@
+{
+  "status": "complete",
+  "model": "xgboost",
+  "model_file": "C:\\Users\\LENOVO\\Documents\\ChatGPT\\Major Project\\models\\xgboost\\xgboost.ubj",
+  "report_dir": "C:\\Users\\LENOVO\\Documents\\ChatGPT\\Major Project\\reports\\models\\xgboost",
+  "seed": 42,
+  "feature_count": 187,
+  "cache_fingerprint": "1377b0b0fefc661d786e7b73da7b8eaa620fd5afdfac922a38dfa20a8205ebf8",
+  "feature_order_sha256": "9a320311d0ded1955037577dce4a90d5f8791bf1366ba40a1b1f78a75652683d",
+  "splits": {
+    "train": {
+      "rows": 1092243,
+      "patients": 28235,
+      "positive_rows": 19541,
+      "negative_rows": 1072702,
+      "positive_patients": 2053,
+      "negative_patients": 26182
+    },
+    "validation": {
+      "rows": 228083,
+      "patients": 6051,
+      "positive_rows": 4177,
+      "negative_rows": 223906,
+      "positive_patients": 440,
+      "negative_patients": 5611
+    },
+    "test": {
+      "rows": 231884,
+      "patients": 6050,
+      "positive_rows": 4198,
+      "negative_rows": 227686,
+      "positive_patients": 439,
+      "negative_patients": 5611
+    }
+  },
+  "training_class_weight": {
+    "rows": 1092243,
+    "positive_rows": 19541,
+    "negative_rows": 1072702,
+    "positive_class_weight": 54.894938846527815,
+    "fit_split": "train"
+  },
+  "training_details": {
+    "parameters": {
+      "objective": "binary:logistic",
+      "eval_metric": "aucpr",
+      "tree_method": "hist",
+      "device": "cpu",
+      "grow_policy": "depthwise",
+      "max_bin": 128,
+      "max_depth": 5,
+      "eta": 0.05,
+      "min_child_weight": 10,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "lambda": 5.0,
+      "scale_pos_weight": 54.894938846527815,
+      "seed": 42,
+      "nthread": 2
+    },
+    "best_iteration": 256,
+    "best_validation_xgboost_aucpr": 0.1301939179713071,
+    "trees_saved": 257,
+    "early_stopping_rounds": 30,
+    "early_stopping_note": "Validation only. XGBoost aucpr is its own PR-area metric; final AUPRC(AP) is separately computed with sklearn average_precision_score.",
+    "memory_note": "CPU ExtMemQuantileDMatrix with disk pages; validation quantiles reference training cuts."
+  },
+  "threshold_selection": {
+    "threshold": 0.8147082924842834,
+    "validation_f1": 0.21059822387040109,
+    "rule": "maximize validation F1; ties choose highest threshold",
+    "comparison": "probability >= threshold",
+    "validation_samples": 228083,
+    "candidate_thresholds": 223239
+  },
+  "fit_seconds": 550.68,
+  "elapsed_seconds": 577.15,
+  "versions": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "pandas": "3.0.1",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1",
+    "matplotlib": "3.11.2",
+    "joblib": "1.6.0"
+  },
+  "protocol": {
+    "evaluation_unit": "hourly record; patients remain disjoint across train/validation/test",
+    "test_role": "final evaluation only; never used for training, stopping or threshold selection",
+    "validation_role": "threshold selection and XGBoost early stopping; development metrics are selection-biased",
+    "calibration": "Assessment of raw model scores; no post-hoc probability calibrator was fitted",
+    "class_imbalance": "Training-only class weights; original validation/test prevalence retained",
+    "limitations": [
+      "Hourly observations within each patient are correlated; these are point estimates, not independent-patient confidence intervals.",
+      "Hourly discrimination, including later positive hours, does not by itself measure early alert timing or clinical safety.",
+      "Class weighting can distort predicted probabilities; consult reliability curves alongside Brier/log loss and ECE.",
+      "This is a fixed research baseline, not an exhaustive hyperparameter search or external validation."
+    ]
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "status": "complete",
+  "model": "random_forest",
+  "model_file": "C:\\Users\\LENOVO\\Documents\\ChatGPT\\Major Project\\models\\random_forest\\random_forest.joblib",
+  "report_dir": "C:\\Users\\LENOVO\\Documents\\ChatGPT\\Major Project\\reports\\models\\random_forest",
+  "seed": 42,
+  "feature_count": 187,
+  "cache_fingerprint": "1377b0b0fefc661d786e7b73da7b8eaa620fd5afdfac922a38dfa20a8205ebf8",
+  "feature_order_sha256": "9a320311d0ded1955037577dce4a90d5f8791bf1366ba40a1b1f78a75652683d",
+  "splits": {
+    "train": {
+      "rows": 1092243,
+      "patients": 28235,
+      "positive_rows": 19541,
+      "negative_rows": 1072702,
+      "positive_patients": 2053,
+      "negative_patients": 26182
+    },
+    "validation": {
+      "rows": 228083,
+      "patients": 6051,
+      "positive_rows": 4177,
+      "negative_rows": 223906,
+      "positive_patients": 440,
+      "negative_patients": 5611
+    },
+    "test": {
+      "rows": 231884,
+      "patients": 6050,
+      "positive_rows": 4198,
+      "negative_rows": 227686,
+      "positive_patients": 439,
+      "negative_patients": 5611
+    }
+  },
+  "training_class_weight": {
+    "rows": 1092243,
+    "positive_rows": 19541,
+    "negative_rows": 1072702,
+    "positive_class_weight": 54.894938846527815,
+    "fit_split": "train"
+  },
+  "training_details": {
+    "parameters": {
+      "bootstrap": true,
+      "ccp_alpha": 0.0,
+      "class_weight": {
+        "0": 1.0,
+        "1": 54.894938846527815
+      },
+      "criterion": "gini",
+      "max_depth": 14,
+      "max_features": "sqrt",
+      "max_leaf_nodes": 1024,
+      "max_samples": 200000,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 20,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 160,
+      "n_jobs": 2,
+      "oob_score": false,
+      "random_state": 42,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "trees": 160,
+    "bootstrap_note": "Each tree draws at most max_samples rows with replacement from the full training pool; no global patient/row subset is discarded.",
+    "memory_note": "Input is float32 memory-mapped data. sklearn is not incremental/out-of-core; tree fitting can page input and allocate working memory. Models run sequentially with bounded tree depth and worker count."
+  },
+  "threshold_selection": {
+    "threshold": 0.6432190053870606,
+    "validation_f1": 0.1949856144677353,
+    "rule": "maximize validation F1; ties choose highest threshold",
+    "comparison": "probability >= threshold",
+    "validation_samples": 228083,
+    "candidate_thresholds": 223765
+  },
+  "fit_seconds": 226.83,
+  "elapsed_seconds": 259.78,
+  "versions": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "pandas": "3.0.1",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1",
+    "matplotlib": "3.11.2",
+    "joblib": "1.6.0"
+  },
+  "protocol": {
+    "evaluation_unit": "hourly record; patients remain disjoint across train/validation/test",
+    "test_role": "final evaluation only; never used for training, stopping or threshold selection",
+    "validation_role": "threshold selection and XGBoost early stopping; development metrics are selection-biased",
+    "calibration": "Assessment of raw model scores; no post-hoc probability calibrator was fitted",
+    "class_imbalance": "Training-only class weights; original validation/test prevalence retained",
+    "limitations": [
+      "Hourly observations within each patient are correlated; these are point estimates, not independent-patient confidence intervals.",
+      "Hourly discrimination, including later positive hours, does not by itself measure early alert timing or clinical safety.",
+      "Class weighting can distort predicted probabilities; consult reliability curves alongside Brier/log loss and ECE.",
+      "This is a fixed research baseline, not an exhaustive hyperparameter search or external validation."
+    ]
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "status": "complete",
+  "model": "xgboost",
+  "experiment": "C",
+  "excluded_features": [
+    "ICULOS",
+    "HospAdmTime",
+    "HospAdmTime__missing"
+  ],
+  "exploratory": true,
+  "model_file": "C:\\Users\\LENOVO\\Documents\\ChatGPT\\Major Project\\models\\timing_ablation\\C\\xgboost.ubj",
+  "report_dir": "C:\\Users\\LENOVO\\Documents\\ChatGPT\\Major Project\\reports\\timing_ablation\\C",
+  "seed": 42,
+  "feature_count": 184,
+  "source_feature_count": 187,
+  "cache_fingerprint": "1377b0b0fefc661d786e7b73da7b8eaa620fd5afdfac922a38dfa20a8205ebf8",
+  "feature_order_sha256": "9f1756e686fc39ed74b82aeb387e34e2717fa6d8a2b7d18329654cb04cefb4eb",
+  "source_feature_order_sha256": "9a320311d0ded1955037577dce4a90d5f8791bf1366ba40a1b1f78a75652683d",
+  "splits": {
+    "train": {
+      "rows": 1092243,
+      "patients": 28235,
+      "positive_rows": 19541,
+      "negative_rows": 1072702,
+      "positive_patients": 2053,
+      "negative_patients": 26182
+    },
+    "validation": {
+      "rows": 228083,
+      "patients": 6051,
+      "positive_rows": 4177,
+      "negative_rows": 223906,
+      "positive_patients": 440,
+      "negative_patients": 5611
+    },
+    "test": {
+      "rows": 231884,
+      "patients": 6050,
+      "positive_rows": 4198,
+      "negative_rows": 227686,
+      "positive_patients": 439,
+      "negative_patients": 5611
+    }
+  },
+  "training_class_weight": {
+    "rows": 1092243,
+    "positive_rows": 19541,
+    "negative_rows": 1072702,
+    "positive_class_weight": 54.894938846527815,
+    "fit_split": "train"
+  },
+  "training_details": {
+    "parameters": {
+      "objective": "binary:logistic",
+      "eval_metric": "aucpr",
+      "tree_method": "hist",
+      "device": "cpu",
+      "grow_policy": "depthwise",
+      "max_bin": 128,
+      "max_depth": 5,
+      "eta": 0.05,
+      "min_child_weight": 10,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "lambda": 5.0,
+      "scale_pos_weight": 54.894938846527815,
+      "seed": 42,
+      "nthread": 2
+    },
+    "best_iteration": 109,
+    "best_validation_xgboost_aucpr": 0.0800235717626092,
+    "trees_saved": 110,
+    "early_stopping_rounds": 30,
+    "early_stopping_note": "Validation only. XGBoost aucpr is its own PR-area metric; final AUPRC(AP) is separately computed with sklearn average_precision_score.",
+    "memory_note": "CPU ExtMemQuantileDMatrix with disk pages; validation quantiles reference training cuts."
+  },
+  "threshold_selection": {
+    "threshold": 0.7380566000938416,
+    "validation_f1": 0.1424624417199102,
+    "rule": "maximize validation F1; ties choose highest threshold",
+    "comparison": "probability >= threshold",
+    "validation_samples": 228083,
+    "candidate_thresholds": 218558
+  },
+  "fit_seconds": 270.04,
+  "elapsed_seconds": 292.45,
+  "versions": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "pandas": "3.0.1",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1",
+    "matplotlib": "3.11.2",
+    "joblib": "1.6.0"
+  },
+  "protocol": {
+    "evaluation_unit": "Hourly record; original patients remain disjoint across train/validation/test.",
+    "test_role": "Exploratory evaluation only; never used for training, early stopping or threshold selection. A fresh holdout is needed for final confirmation.",
+    "validation_role": "Original validation patients select XGBoost early stopping and the experiment's maximum-F1 threshold; development metrics are selection-biased.",
+    "feature_ablation": "Only the named predictor columns are omitted. Original row order, labels, patient IDs, dataset source and ICULOS metadata are preserved.",
+    "training": "The original fit_xgboost implementation and unchanged baseline hyperparameters, seed, training-derived quantiles, class weights and early-stopping rule are reused.",
+    "calibration": "Assessment of raw class-weighted model probabilities; no post-hoc calibrator is fitted.",
+    "class_imbalance": "Training-only class weights; original validation/test prevalence retained.",
+    "memory": "Lazy ColumnSubset selects columns after bounded row slicing; no complete feature-subset matrix is materialized.",
+    "limitations": [
+      "The ablation was motivated by findings on an already examined test cohort; comparisons are exploratory, not fresh independent validation.",
+      "Correlated physiological or missingness features can retain timing/source information after explicit time predictors are removed.",
+      "Removing ICULOS as a predictor does not remove it as the historical time coordinate used by existing causal preprocessing and evaluation.",
+      "Hourly observations within patients are correlated; point estimates do not establish clinical benefit or safety."
+    ]
+  }
+}
