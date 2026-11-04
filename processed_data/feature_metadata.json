@@ -1,0 +1,1508 @@
+{
+  "predictor_columns": [
+    "HR",
+    "HR__missing",
+    "O2Sat",
+    "O2Sat__missing",
+    "Temp",
+    "Temp__missing",
+    "SBP",
+    "SBP__missing",
+    "MAP",
+    "MAP__missing",
+    "DBP",
+    "DBP__missing",
+    "Resp",
+    "Resp__missing",
+    "EtCO2",
+    "EtCO2__missing",
+    "BaseExcess",
+    "BaseExcess__missing",
+    "HCO3",
+    "HCO3__missing",
+    "FiO2",
+    "FiO2__missing",
+    "pH",
+    "pH__missing",
+    "PaCO2",
+    "PaCO2__missing",
+    "SaO2",
+    "SaO2__missing",
+    "AST",
+    "AST__missing",
+    "BUN",
+    "BUN__missing",
+    "Alkalinephos",
+    "Alkalinephos__missing",
+    "Calcium",
+    "Calcium__missing",
+    "Chloride",
+    "Chloride__missing",
+    "Creatinine",
+    "Creatinine__missing",
+    "Bilirubin_direct",
+    "Bilirubin_direct__missing",
+    "Glucose",
+    "Glucose__missing",
+    "Lactate",
+    "Lactate__missing",
+    "Magnesium",
+    "Magnesium__missing",
+    "Phosphate",
+    "Phosphate__missing",
+    "Potassium",
+    "Potassium__missing",
+    "Bilirubin_total",
+    "Bilirubin_total__missing",
+    "TroponinI",
+    "TroponinI__missing",
+    "Hct",
+    "Hct__missing",
+    "Hgb",
+    "Hgb__missing",
+    "PTT",
+    "PTT__missing",
+    "WBC",
+    "WBC__missing",
+    "Fibrinogen",
+    "Fibrinogen__missing",
+    "Platelets",
+    "Platelets__missing",
+    "Age",
+    "Age__missing",
+    "Gender",
+    "Gender__missing",
+    "Unit1",
+    "Unit1__missing",
+    "Unit2",
+    "Unit2__missing",
+    "HospAdmTime",
+    "HospAdmTime__missing",
+    "ICULOS",
+    "HR__previous",
+    "HR__delta",
+    "HR__hours_since_observed",
+    "HR__mean_3h",
+    "HR__min_3h",
+    "HR__max_3h",
+    "HR__std_3h",
+    "HR__slope_3h",
+    "HR__mean_6h",
+    "HR__min_6h",
+    "HR__max_6h",
+    "HR__std_6h",
+    "HR__slope_6h",
+    "HR__mean_12h",
+    "HR__min_12h",
+    "HR__max_12h",
+    "HR__std_12h",
+    "HR__slope_12h",
+    "O2Sat__previous",
+    "O2Sat__delta",
+    "O2Sat__hours_since_observed",
+    "O2Sat__mean_3h",
+    "O2Sat__min_3h",
+    "O2Sat__max_3h",
+    "O2Sat__std_3h",
+    "O2Sat__slope_3h",
+    "O2Sat__mean_6h",
+    "O2Sat__min_6h",
+    "O2Sat__max_6h",
+    "O2Sat__std_6h",
+    "O2Sat__slope_6h",
+    "O2Sat__mean_12h",
+    "O2Sat__min_12h",
+    "O2Sat__max_12h",
+    "O2Sat__std_12h",
+    "O2Sat__slope_12h",
+    "Temp__previous",
+    "Temp__delta",
+    "Temp__hours_since_observed",
+    "Temp__mean_3h",
+    "Temp__min_3h",
+    "Temp__max_3h",
+    "Temp__std_3h",
+    "Temp__slope_3h",
+    "Temp__mean_6h",
+    "Temp__min_6h",
+    "Temp__max_6h",
+    "Temp__std_6h",
+    "Temp__slope_6h",
+    "Temp__mean_12h",
+    "Temp__min_12h",
+    "Temp__max_12h",
+    "Temp__std_12h",
+    "Temp__slope_12h",
+    "SBP__previous",
+    "SBP__delta",
+    "SBP__hours_since_observed",
+    "SBP__mean_3h",
+    "SBP__min_3h",
+    "SBP__max_3h",
+    "SBP__std_3h",
+    "SBP__slope_3h",
+    "SBP__mean_6h",
+    "SBP__min_6h",
+    "SBP__max_6h",
+    "SBP__std_6h",
+    "SBP__slope_6h",
+    "SBP__mean_12h",
+    "SBP__min_12h",
+    "SBP__max_12h",
+    "SBP__std_12h",
+    "SBP__slope_12h",
+    "MAP__previous",
+    "MAP__delta",
+    "MAP__hours_since_observed",
+    "MAP__mean_3h",
+    "MAP__min_3h",
+    "MAP__max_3h",
+    "MAP__std_3h",
+    "MAP__slope_3h",
+    "MAP__mean_6h",
+    "MAP__min_6h",
+    "MAP__max_6h",
+    "MAP__std_6h",
+    "MAP__slope_6h",
+    "MAP__mean_12h",
+    "MAP__min_12h",
+    "MAP__max_12h",
+    "MAP__std_12h",
+    "MAP__slope_12h",
+    "Resp__previous",
+    "Resp__delta",
+    "Resp__hours_since_observed",
+    "Resp__mean_3h",
+    "Resp__min_3h",
+    "Resp__max_3h",
+    "Resp__std_3h",
+    "Resp__slope_3h",
+    "Resp__mean_6h",
+    "Resp__min_6h",
+    "Resp__max_6h",
+    "Resp__std_6h",
+    "Resp__slope_6h",
+    "Resp__mean_12h",
+    "Resp__min_12h",
+    "Resp__max_12h",
+    "Resp__std_12h",
+    "Resp__slope_12h"
+  ],
+  "excluded_metadata_columns": [
+    "SepsisLabel",
+    "dataset",
+    "patient_id"
+  ],
+  "dropped_empty_training_features": [],
+  "features": {
+    "HR": {
+      "description": "Original hourly predictor. Forward-filled from this patient's past for at most 3 hours.",
+      "kind": "current",
+      "source": "HR",
+      "fallback": "training_median",
+      "fallback_source": "HR"
+    },
+    "HR__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "HR",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "O2Sat": {
+      "description": "Original hourly predictor. Forward-filled from this patient's past for at most 3 hours.",
+      "kind": "current",
+      "source": "O2Sat",
+      "fallback": "training_median",
+      "fallback_source": "O2Sat"
+    },
+    "O2Sat__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "O2Sat",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Temp": {
+      "description": "Original hourly predictor. Forward-filled from this patient's past for at most 3 hours.",
+      "kind": "current",
+      "source": "Temp",
+      "fallback": "training_median",
+      "fallback_source": "Temp"
+    },
+    "Temp__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Temp",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "SBP": {
+      "description": "Original hourly predictor. Forward-filled from this patient's past for at most 3 hours.",
+      "kind": "current",
+      "source": "SBP",
+      "fallback": "training_median",
+      "fallback_source": "SBP"
+    },
+    "SBP__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "SBP",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "MAP": {
+      "description": "Original hourly predictor. Forward-filled from this patient's past for at most 3 hours.",
+      "kind": "current",
+      "source": "MAP",
+      "fallback": "training_median",
+      "fallback_source": "MAP"
+    },
+    "MAP__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "MAP",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "DBP": {
+      "description": "Original hourly predictor. Forward-filled from this patient's past for at most 3 hours.",
+      "kind": "current",
+      "source": "DBP",
+      "fallback": "training_median",
+      "fallback_source": "DBP"
+    },
+    "DBP__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "DBP",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Resp": {
+      "description": "Original hourly predictor. Forward-filled from this patient's past for at most 3 hours.",
+      "kind": "current",
+      "source": "Resp",
+      "fallback": "training_median",
+      "fallback_source": "Resp"
+    },
+    "Resp__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Resp",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "EtCO2": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "EtCO2",
+      "fallback": "training_median",
+      "fallback_source": "EtCO2"
+    },
+    "EtCO2__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "EtCO2",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "BaseExcess": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "BaseExcess",
+      "fallback": "training_median",
+      "fallback_source": "BaseExcess"
+    },
+    "BaseExcess__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "BaseExcess",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "HCO3": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "HCO3",
+      "fallback": "training_median",
+      "fallback_source": "HCO3"
+    },
+    "HCO3__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "HCO3",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "FiO2": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "FiO2",
+      "fallback": "training_median",
+      "fallback_source": "FiO2"
+    },
+    "FiO2__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "FiO2",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "pH": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "pH",
+      "fallback": "training_median",
+      "fallback_source": "pH"
+    },
+    "pH__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "pH",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "PaCO2": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "PaCO2",
+      "fallback": "training_median",
+      "fallback_source": "PaCO2"
+    },
+    "PaCO2__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "PaCO2",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "SaO2": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "SaO2",
+      "fallback": "training_median",
+      "fallback_source": "SaO2"
+    },
+    "SaO2__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "SaO2",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "AST": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "AST",
+      "fallback": "training_median",
+      "fallback_source": "AST"
+    },
+    "AST__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "AST",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "BUN": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "BUN",
+      "fallback": "training_median",
+      "fallback_source": "BUN"
+    },
+    "BUN__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "BUN",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Alkalinephos": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Alkalinephos",
+      "fallback": "training_median",
+      "fallback_source": "Alkalinephos"
+    },
+    "Alkalinephos__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Alkalinephos",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Calcium": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Calcium",
+      "fallback": "training_median",
+      "fallback_source": "Calcium"
+    },
+    "Calcium__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Calcium",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Chloride": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Chloride",
+      "fallback": "training_median",
+      "fallback_source": "Chloride"
+    },
+    "Chloride__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Chloride",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Creatinine": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Creatinine",
+      "fallback": "training_median",
+      "fallback_source": "Creatinine"
+    },
+    "Creatinine__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Creatinine",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Bilirubin_direct": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Bilirubin_direct",
+      "fallback": "training_median",
+      "fallback_source": "Bilirubin_direct"
+    },
+    "Bilirubin_direct__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Bilirubin_direct",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Glucose": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Glucose",
+      "fallback": "training_median",
+      "fallback_source": "Glucose"
+    },
+    "Glucose__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Glucose",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Lactate": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Lactate",
+      "fallback": "training_median",
+      "fallback_source": "Lactate"
+    },
+    "Lactate__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Lactate",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Magnesium": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Magnesium",
+      "fallback": "training_median",
+      "fallback_source": "Magnesium"
+    },
+    "Magnesium__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Magnesium",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Phosphate": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Phosphate",
+      "fallback": "training_median",
+      "fallback_source": "Phosphate"
+    },
+    "Phosphate__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Phosphate",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Potassium": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Potassium",
+      "fallback": "training_median",
+      "fallback_source": "Potassium"
+    },
+    "Potassium__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Potassium",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Bilirubin_total": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Bilirubin_total",
+      "fallback": "training_median",
+      "fallback_source": "Bilirubin_total"
+    },
+    "Bilirubin_total__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Bilirubin_total",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "TroponinI": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "TroponinI",
+      "fallback": "training_median",
+      "fallback_source": "TroponinI"
+    },
+    "TroponinI__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "TroponinI",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Hct": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Hct",
+      "fallback": "training_median",
+      "fallback_source": "Hct"
+    },
+    "Hct__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Hct",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Hgb": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Hgb",
+      "fallback": "training_median",
+      "fallback_source": "Hgb"
+    },
+    "Hgb__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Hgb",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "PTT": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "PTT",
+      "fallback": "training_median",
+      "fallback_source": "PTT"
+    },
+    "PTT__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "PTT",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "WBC": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "WBC",
+      "fallback": "training_median",
+      "fallback_source": "WBC"
+    },
+    "WBC__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "WBC",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Fibrinogen": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Fibrinogen",
+      "fallback": "training_median",
+      "fallback_source": "Fibrinogen"
+    },
+    "Fibrinogen__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Fibrinogen",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Platelets": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Platelets",
+      "fallback": "training_median",
+      "fallback_source": "Platelets"
+    },
+    "Platelets__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Platelets",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Age": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Age",
+      "fallback": "training_median",
+      "fallback_source": "Age"
+    },
+    "Age__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Age",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Gender": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Gender",
+      "fallback": "training_median",
+      "fallback_source": "Gender"
+    },
+    "Gender__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Gender",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Unit1": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Unit1",
+      "fallback": "training_median",
+      "fallback_source": "Unit1"
+    },
+    "Unit1__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Unit1",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Unit2": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "Unit2",
+      "fallback": "training_median",
+      "fallback_source": "Unit2"
+    },
+    "Unit2__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "Unit2",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "HospAdmTime": {
+      "description": "Original hourly predictor.",
+      "kind": "current",
+      "source": "HospAdmTime",
+      "fallback": "training_median",
+      "fallback_source": "HospAdmTime"
+    },
+    "HospAdmTime__missing": {
+      "description": "1 if the original value is missing, otherwise 0.",
+      "kind": "missing_indicator",
+      "source": "HospAdmTime",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "ICULOS": {
+      "description": "Original hourly predictor. Required observed time coordinate.",
+      "kind": "time",
+      "source": "ICULOS",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "HR__previous": {
+      "description": "Value at the preceding hour after bounded causal forward filling.",
+      "kind": "previous",
+      "source": "HR",
+      "fallback": "training_median",
+      "fallback_source": "HR"
+    },
+    "HR__delta": {
+      "description": "Current minus preceding-hour value after bounded causal forward filling.",
+      "kind": "delta",
+      "source": "HR",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "HR__hours_since_observed": {
+      "description": "Hours since last original observation; -1 if never observed.",
+      "kind": "recency",
+      "source": "HR",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "HR__mean_3h": {
+      "description": "mean of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "HR",
+      "fallback": "training_median",
+      "fallback_source": "HR"
+    },
+    "HR__min_3h": {
+      "description": "min of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "HR",
+      "fallback": "training_median",
+      "fallback_source": "HR"
+    },
+    "HR__max_3h": {
+      "description": "max of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "HR",
+      "fallback": "training_median",
+      "fallback_source": "HR"
+    },
+    "HR__std_3h": {
+      "description": "std of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "HR",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "HR__slope_3h": {
+      "description": "slope of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "HR",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "HR__mean_6h": {
+      "description": "mean of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "HR",
+      "fallback": "training_median",
+      "fallback_source": "HR"
+    },
+    "HR__min_6h": {
+      "description": "min of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "HR",
+      "fallback": "training_median",
+      "fallback_source": "HR"
+    },
+    "HR__max_6h": {
+      "description": "max of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "HR",
+      "fallback": "training_median",
+      "fallback_source": "HR"
+    },
+    "HR__std_6h": {
+      "description": "std of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "HR",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "HR__slope_6h": {
+      "description": "slope of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "HR",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "HR__mean_12h": {
+      "description": "mean of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "HR",
+      "fallback": "training_median",
+      "fallback_source": "HR"
+    },
+    "HR__min_12h": {
+      "description": "min of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "HR",
+      "fallback": "training_median",
+      "fallback_source": "HR"
+    },
+    "HR__max_12h": {
+      "description": "max of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "HR",
+      "fallback": "training_median",
+      "fallback_source": "HR"
+    },
+    "HR__std_12h": {
+      "description": "std of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "HR",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "HR__slope_12h": {
+      "description": "slope of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "HR",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "O2Sat__previous": {
+      "description": "Value at the preceding hour after bounded causal forward filling.",
+      "kind": "previous",
+      "source": "O2Sat",
+      "fallback": "training_median",
+      "fallback_source": "O2Sat"
+    },
+    "O2Sat__delta": {
+      "description": "Current minus preceding-hour value after bounded causal forward filling.",
+      "kind": "delta",
+      "source": "O2Sat",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "O2Sat__hours_since_observed": {
+      "description": "Hours since last original observation; -1 if never observed.",
+      "kind": "recency",
+      "source": "O2Sat",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "O2Sat__mean_3h": {
+      "description": "mean of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "O2Sat",
+      "fallback": "training_median",
+      "fallback_source": "O2Sat"
+    },
+    "O2Sat__min_3h": {
+      "description": "min of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "O2Sat",
+      "fallback": "training_median",
+      "fallback_source": "O2Sat"
+    },
+    "O2Sat__max_3h": {
+      "description": "max of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "O2Sat",
+      "fallback": "training_median",
+      "fallback_source": "O2Sat"
+    },
+    "O2Sat__std_3h": {
+      "description": "std of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "O2Sat",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "O2Sat__slope_3h": {
+      "description": "slope of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "O2Sat",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "O2Sat__mean_6h": {
+      "description": "mean of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "O2Sat",
+      "fallback": "training_median",
+      "fallback_source": "O2Sat"
+    },
+    "O2Sat__min_6h": {
+      "description": "min of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "O2Sat",
+      "fallback": "training_median",
+      "fallback_source": "O2Sat"
+    },
+    "O2Sat__max_6h": {
+      "description": "max of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "O2Sat",
+      "fallback": "training_median",
+      "fallback_source": "O2Sat"
+    },
+    "O2Sat__std_6h": {
+      "description": "std of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "O2Sat",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "O2Sat__slope_6h": {
+      "description": "slope of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "O2Sat",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "O2Sat__mean_12h": {
+      "description": "mean of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "O2Sat",
+      "fallback": "training_median",
+      "fallback_source": "O2Sat"
+    },
+    "O2Sat__min_12h": {
+      "description": "min of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "O2Sat",
+      "fallback": "training_median",
+      "fallback_source": "O2Sat"
+    },
+    "O2Sat__max_12h": {
+      "description": "max of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "O2Sat",
+      "fallback": "training_median",
+      "fallback_source": "O2Sat"
+    },
+    "O2Sat__std_12h": {
+      "description": "std of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "O2Sat",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "O2Sat__slope_12h": {
+      "description": "slope of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "O2Sat",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Temp__previous": {
+      "description": "Value at the preceding hour after bounded causal forward filling.",
+      "kind": "previous",
+      "source": "Temp",
+      "fallback": "training_median",
+      "fallback_source": "Temp"
+    },
+    "Temp__delta": {
+      "description": "Current minus preceding-hour value after bounded causal forward filling.",
+      "kind": "delta",
+      "source": "Temp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Temp__hours_since_observed": {
+      "description": "Hours since last original observation; -1 if never observed.",
+      "kind": "recency",
+      "source": "Temp",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Temp__mean_3h": {
+      "description": "mean of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "Temp",
+      "fallback": "training_median",
+      "fallback_source": "Temp"
+    },
+    "Temp__min_3h": {
+      "description": "min of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "Temp",
+      "fallback": "training_median",
+      "fallback_source": "Temp"
+    },
+    "Temp__max_3h": {
+      "description": "max of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "Temp",
+      "fallback": "training_median",
+      "fallback_source": "Temp"
+    },
+    "Temp__std_3h": {
+      "description": "std of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "Temp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Temp__slope_3h": {
+      "description": "slope of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "Temp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Temp__mean_6h": {
+      "description": "mean of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "Temp",
+      "fallback": "training_median",
+      "fallback_source": "Temp"
+    },
+    "Temp__min_6h": {
+      "description": "min of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "Temp",
+      "fallback": "training_median",
+      "fallback_source": "Temp"
+    },
+    "Temp__max_6h": {
+      "description": "max of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "Temp",
+      "fallback": "training_median",
+      "fallback_source": "Temp"
+    },
+    "Temp__std_6h": {
+      "description": "std of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "Temp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Temp__slope_6h": {
+      "description": "slope of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "Temp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Temp__mean_12h": {
+      "description": "mean of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "Temp",
+      "fallback": "training_median",
+      "fallback_source": "Temp"
+    },
+    "Temp__min_12h": {
+      "description": "min of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "Temp",
+      "fallback": "training_median",
+      "fallback_source": "Temp"
+    },
+    "Temp__max_12h": {
+      "description": "max of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "Temp",
+      "fallback": "training_median",
+      "fallback_source": "Temp"
+    },
+    "Temp__std_12h": {
+      "description": "std of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "Temp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Temp__slope_12h": {
+      "description": "slope of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "Temp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "SBP__previous": {
+      "description": "Value at the preceding hour after bounded causal forward filling.",
+      "kind": "previous",
+      "source": "SBP",
+      "fallback": "training_median",
+      "fallback_source": "SBP"
+    },
+    "SBP__delta": {
+      "description": "Current minus preceding-hour value after bounded causal forward filling.",
+      "kind": "delta",
+      "source": "SBP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "SBP__hours_since_observed": {
+      "description": "Hours since last original observation; -1 if never observed.",
+      "kind": "recency",
+      "source": "SBP",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "SBP__mean_3h": {
+      "description": "mean of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "SBP",
+      "fallback": "training_median",
+      "fallback_source": "SBP"
+    },
+    "SBP__min_3h": {
+      "description": "min of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "SBP",
+      "fallback": "training_median",
+      "fallback_source": "SBP"
+    },
+    "SBP__max_3h": {
+      "description": "max of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "SBP",
+      "fallback": "training_median",
+      "fallback_source": "SBP"
+    },
+    "SBP__std_3h": {
+      "description": "std of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "SBP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "SBP__slope_3h": {
+      "description": "slope of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "SBP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "SBP__mean_6h": {
+      "description": "mean of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "SBP",
+      "fallback": "training_median",
+      "fallback_source": "SBP"
+    },
+    "SBP__min_6h": {
+      "description": "min of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "SBP",
+      "fallback": "training_median",
+      "fallback_source": "SBP"
+    },
+    "SBP__max_6h": {
+      "description": "max of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "SBP",
+      "fallback": "training_median",
+      "fallback_source": "SBP"
+    },
+    "SBP__std_6h": {
+      "description": "std of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "SBP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "SBP__slope_6h": {
+      "description": "slope of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "SBP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "SBP__mean_12h": {
+      "description": "mean of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "SBP",
+      "fallback": "training_median",
+      "fallback_source": "SBP"
+    },
+    "SBP__min_12h": {
+      "description": "min of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "SBP",
+      "fallback": "training_median",
+      "fallback_source": "SBP"
+    },
+    "SBP__max_12h": {
+      "description": "max of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "SBP",
+      "fallback": "training_median",
+      "fallback_source": "SBP"
+    },
+    "SBP__std_12h": {
+      "description": "std of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "SBP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "SBP__slope_12h": {
+      "description": "slope of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "SBP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "MAP__previous": {
+      "description": "Value at the preceding hour after bounded causal forward filling.",
+      "kind": "previous",
+      "source": "MAP",
+      "fallback": "training_median",
+      "fallback_source": "MAP"
+    },
+    "MAP__delta": {
+      "description": "Current minus preceding-hour value after bounded causal forward filling.",
+      "kind": "delta",
+      "source": "MAP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "MAP__hours_since_observed": {
+      "description": "Hours since last original observation; -1 if never observed.",
+      "kind": "recency",
+      "source": "MAP",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "MAP__mean_3h": {
+      "description": "mean of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "MAP",
+      "fallback": "training_median",
+      "fallback_source": "MAP"
+    },
+    "MAP__min_3h": {
+      "description": "min of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "MAP",
+      "fallback": "training_median",
+      "fallback_source": "MAP"
+    },
+    "MAP__max_3h": {
+      "description": "max of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "MAP",
+      "fallback": "training_median",
+      "fallback_source": "MAP"
+    },
+    "MAP__std_3h": {
+      "description": "std of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "MAP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "MAP__slope_3h": {
+      "description": "slope of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "MAP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "MAP__mean_6h": {
+      "description": "mean of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "MAP",
+      "fallback": "training_median",
+      "fallback_source": "MAP"
+    },
+    "MAP__min_6h": {
+      "description": "min of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "MAP",
+      "fallback": "training_median",
+      "fallback_source": "MAP"
+    },
+    "MAP__max_6h": {
+      "description": "max of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "MAP",
+      "fallback": "training_median",
+      "fallback_source": "MAP"
+    },
+    "MAP__std_6h": {
+      "description": "std of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "MAP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "MAP__slope_6h": {
+      "description": "slope of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "MAP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "MAP__mean_12h": {
+      "description": "mean of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "MAP",
+      "fallback": "training_median",
+      "fallback_source": "MAP"
+    },
+    "MAP__min_12h": {
+      "description": "min of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "MAP",
+      "fallback": "training_median",
+      "fallback_source": "MAP"
+    },
+    "MAP__max_12h": {
+      "description": "max of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "MAP",
+      "fallback": "training_median",
+      "fallback_source": "MAP"
+    },
+    "MAP__std_12h": {
+      "description": "std of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "MAP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "MAP__slope_12h": {
+      "description": "slope of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "MAP",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Resp__previous": {
+      "description": "Value at the preceding hour after bounded causal forward filling.",
+      "kind": "previous",
+      "source": "Resp",
+      "fallback": "training_median",
+      "fallback_source": "Resp"
+    },
+    "Resp__delta": {
+      "description": "Current minus preceding-hour value after bounded causal forward filling.",
+      "kind": "delta",
+      "source": "Resp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Resp__hours_since_observed": {
+      "description": "Hours since last original observation; -1 if never observed.",
+      "kind": "recency",
+      "source": "Resp",
+      "fallback": "none",
+      "fallback_source": null
+    },
+    "Resp__mean_3h": {
+      "description": "mean of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "Resp",
+      "fallback": "training_median",
+      "fallback_source": "Resp"
+    },
+    "Resp__min_3h": {
+      "description": "min of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "Resp",
+      "fallback": "training_median",
+      "fallback_source": "Resp"
+    },
+    "Resp__max_3h": {
+      "description": "max of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "Resp",
+      "fallback": "training_median",
+      "fallback_source": "Resp"
+    },
+    "Resp__std_3h": {
+      "description": "std of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "Resp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Resp__slope_3h": {
+      "description": "slope of original observations in (ICULOS-3, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "Resp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Resp__mean_6h": {
+      "description": "mean of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "Resp",
+      "fallback": "training_median",
+      "fallback_source": "Resp"
+    },
+    "Resp__min_6h": {
+      "description": "min of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "Resp",
+      "fallback": "training_median",
+      "fallback_source": "Resp"
+    },
+    "Resp__max_6h": {
+      "description": "max of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "Resp",
+      "fallback": "training_median",
+      "fallback_source": "Resp"
+    },
+    "Resp__std_6h": {
+      "description": "std of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "Resp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Resp__slope_6h": {
+      "description": "slope of original observations in (ICULOS-6, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "Resp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Resp__mean_12h": {
+      "description": "mean of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "mean",
+      "source": "Resp",
+      "fallback": "training_median",
+      "fallback_source": "Resp"
+    },
+    "Resp__min_12h": {
+      "description": "min of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "min",
+      "source": "Resp",
+      "fallback": "training_median",
+      "fallback_source": "Resp"
+    },
+    "Resp__max_12h": {
+      "description": "max of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values.",
+      "kind": "max",
+      "source": "Resp",
+      "fallback": "training_median",
+      "fallback_source": "Resp"
+    },
+    "Resp__std_12h": {
+      "description": "std of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. Population standard deviation; requires at least 2 observations.",
+      "kind": "std",
+      "source": "Resp",
+      "fallback": "zero",
+      "fallback_source": null
+    },
+    "Resp__slope_12h": {
+      "description": "slope of original observations in (ICULOS-12, ICULOS]; includes current hour, excludes future hours and forward-filled values. OLS slope per hour; requires at least 2 observations.",
+      "kind": "slope",
+      "source": "Resp",
+      "fallback": "zero",
+      "fallback_source": null
+    }
+  }
+}

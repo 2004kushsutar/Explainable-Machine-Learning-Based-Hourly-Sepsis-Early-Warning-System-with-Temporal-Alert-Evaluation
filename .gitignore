@@ -8,9 +8,9 @@ reports/
 !.env.example
 __pycache__/
 *.py[cod]
-processed_data/
-processed_data.inprogress-*/
-processed_data.backup-*/
+# processed_data/
+# processed_data.inprogress-*/
+# processed_data.backup-*/
 training_setA/
 training_setB/
 archive/

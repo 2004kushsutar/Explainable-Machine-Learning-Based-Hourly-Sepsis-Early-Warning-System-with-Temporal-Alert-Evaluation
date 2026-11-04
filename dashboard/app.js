@@ -18,7 +18,7 @@
     activeSnapshot: null, pendingSnapshot: null, patientController: null,
     searchController: null, reviewController: null, searchTimer: null,
     hourTimer: null, review: null, retry: null, patients: [], revealedPatients: new Set(),
-    studyData: null,
+    studyData: null, audioEnabled: false, audioCtx: null, lastAlertHour: null,
   };
   const finite = (value) => typeof value === "number" && Number.isFinite(value);
   const fmt = (value, digits = 2) => finite(value) ? value.toLocaleString(undefined, {maximumFractionDigits: digits}) : "—";
@@ -53,6 +53,42 @@
   }
 
   function clearError() { $("error-panel").hidden = true; state.retry = null; }
+
+  // --- Clinical Alarm Sound ---
+  const alarmAudio = new Audio("/alarm.wav");
+
+  function playAlertChime() {
+    if (!state.audioEnabled) return;
+    try {
+      alarmAudio.currentTime = 0;
+      alarmAudio.play().catch((e) => {
+        console.warn("Could not play alarm audio:", e);
+      });
+    } catch (e) {
+      console.warn("Audio play exception:", e);
+    }
+  }
+
+  function toggleAudio() {
+    state.audioEnabled = !state.audioEnabled;
+    const btn = $("audio-toggle-btn");
+    const icon = $("audio-toggle-icon");
+    const label = $("audio-toggle-label");
+    if (!btn) return;
+
+    btn.setAttribute("aria-pressed", String(state.audioEnabled));
+    if (state.audioEnabled) {
+      if (icon) icon.textContent = "🔊";
+      if (label) label.textContent = "Alert Sound: On";
+      btn.style.borderColor = "var(--teal)";
+      // Initialize audio context on explicit user gesture
+      playAlertChime();
+    } else {
+      if (icon) icon.textContent = "🔇";
+      if (label) label.textContent = "Alert Sound: Off";
+      btn.style.borderColor = "";
+    }
+  }
 
   function controls() {
     const ready = !!state.patient;
@@ -326,6 +362,14 @@
       $("policy-suppression-tag").textContent = "Immediate 1h Alerting";
       $("policy-suppression-tag").className = "pill pill-neutral";
       $("policy-suppression-tag").title = "Alerts on any single-hour threshold excursion";
+    }
+
+    // Trigger clinical alarm chime if active alert occurs at this hour
+    if (s.alert && state.lastAlertHour !== s.hour) {
+      playAlertChime();
+      state.lastAlertHour = s.hour;
+    } else if (!s.alert) {
+      state.lastAlertHour = null;
     }
 
     renderChart($("score-chart"), s.score_history, "model_score", {score: true, threshold: s.threshold, title: `Uncalibrated model scores through ICU hour ${s.hour}`});
@@ -677,6 +721,7 @@
     }
   });
   $("study-modal-btn").addEventListener("click", openStudyModal);
+  $("audio-toggle-btn")?.addEventListener("click", toggleAudio);
   $("close-study-modal").addEventListener("click", closeStudyModal);
   $("dismiss-study-modal").addEventListener("click", closeStudyModal);
   $("study-modal").addEventListener("click", (e) => {
@@ -1145,6 +1190,7 @@
     if (isConfirmed) {
       alertBox.className = "final-alert-box alert-confirmed";
       alertBox.textContent = "🚨 CRITICAL ALERT: SEPSIS RISK CONFIRMED (Experiment 5 Policy)";
+      playAlertChime();
     } else if (isPending) {
       alertBox.className = "final-alert-box alert-pending";
       alertBox.textContent = "⏳ TEMPORAL CONFIRMATION PENDING (< 3 hourly observations recorded)";
